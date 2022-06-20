@@ -18,3 +18,4 @@ use App\Http\Controllers\AddressController;
 Route::get('/address',[AddressController::class,'getAddress']);
 Route::post('/address',[AddressController::class,'postAddress']);
 Route::post('/address/{id}',[AddressController::class,'editAddress']);
+Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
