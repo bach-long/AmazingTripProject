@@ -1,0 +1,34 @@
+::-webkit-scrollbar {
+    width: 0;
+}
+
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    ;
+    box-sizing: border-box;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+:root {
+    --white: #ffffff;
+    --nav-light-blue: #B3ECFF;
+    --background-light-blue: #d8eefe;
+    --background-dark-blue: #094067;
+    --btn-orange: #FF751A;
+    --btn-blue: #3da9fc;
+    --text-orange: #FF751A;
+    --text-headline-dark-blue: #094067;
+    --text-light-gray: #5F6C7B;
+    --text-hight-light-red: #EF4565;
+    --line-light-blue: #3DA9FC;
+}
+
+.mg-r10 {
+    margin-right: 10px;
+}
+
+.root {
+    background-color: red;
+}
