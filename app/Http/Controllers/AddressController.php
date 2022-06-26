@@ -94,5 +94,30 @@ class AddressController extends Controller
         }
     }
 
+    public function getAddressByHost($id)
+    {
+        if($id == 1){
+            $result = Address::where('id_host', $id)->get();
+            if($result)
+            {
+                return response()->json([
+                    'data' => $result,
+                    'status' => 200,
+                    'message' => 'Get address by id host'
+                ]); 
+            }else{
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Delete address fail'
+                ]);
+            }
+        }else{
+            return response()->json([
+                'status' => 400,
+                'message' => 'You are not a host'
+            ]);
+        }
+    }
+
         
 }

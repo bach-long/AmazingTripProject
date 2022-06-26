@@ -36,6 +36,8 @@ Route::post('/address',[AddressController::class,'postAddress']);
 Route::post('/address/{id}',[AddressController::class,'editAddress']);
 Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
 
+Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']);
+
 Route::get('/blog',[BlogController::class,'getBlog']);
 Route::post('/blog',[BlogController::class,'postBlog']);
 Route::patch('/blog/{id}',[BlogController::class,'editBlog']);
