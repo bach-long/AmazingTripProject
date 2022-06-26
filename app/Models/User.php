@@ -20,7 +20,7 @@ class User extends Authenticatable
     protected $table = 'user_travel';
     protected $fillable = [
         'id',
-        'name',
+        'username',
         'email',
         'phone',
         'address',
