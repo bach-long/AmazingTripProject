@@ -14,8 +14,10 @@ class LoginControler extends Controller
             'phone'=> $request->phone, 'password'=> $request->password,
         ];
         if(Auth::attempt($arr)){
+            $profile = Auth::user();
             return response()->json([
                 'status' => 200,
+                'user'=> $profile,
                 'message' => 'Login successfully'
             ]);
         }else
