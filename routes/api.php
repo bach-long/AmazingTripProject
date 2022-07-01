@@ -63,3 +63,4 @@ Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
 
 
+
