@@ -17,7 +17,7 @@ class CreateTableUserTravel extends Migration
             $table->id();
             $table->string('username');
             $table->dateTime('birthday');
-            $table->string('email')->unique();;
+            $table->string('email')->unique();
             $table->string('phone');
             $table->string('password');
             $table->string('address')->nullable();;

@@ -27,14 +27,14 @@ class BlogAddressController extends Controller
             $blo->blog_content = $req->input('blog_content');
 
 
-            // $image = $req->blog_address_image;
-            // if(!empty($image))
-            // {
-            //     $req->blog_address_image = $image->getClientOriginalName();
-            //     $image->move('upload/blog_address',$image->getClientOriginalName());
-            // }else{
-
-            // }
+            $image = $req->blog_address_image;
+            if(!empty($image))
+            {
+                $req->blog_address_image = $image->getClientOriginalName();
+                $image->move('upload/blog_address',$image->getClientOriginalName());
+            }else{
+                $blo->blog_address_image = 'default.jpg';
+            }
 
 
             if($blo->save()){
