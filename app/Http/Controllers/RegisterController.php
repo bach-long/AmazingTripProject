@@ -21,54 +21,54 @@ class RegisterController extends Controller
         $newUser->birthday = $request->birthday;
         $newUser->role = $request->role;
         $avatar = $request->avatar;
-        // if(!empty($avatar))
-        // {
-        //     //$data['avatar'] = $avatar->getClientOriginalName();
-        //     //$avatar->move('upload/user/avatar',$avatar->getClientOriginalName());
-        //     $newUser->avatar = $data['avatar'];
-        //     if($newUser->save())
-        //     {
-        //         return response()->json([
-        //             'status' => 200,
-        //             'message' => 'Register succesfully'
-        //         ]);
-        //     }else
-        //     {
-        //         return response()->json([
-        //             'status' => 400,
-        //             'message' => 'Register fail'
-        //         ]);
-        //     }
-            
-        // }else
-        // {
-        //     $newUser->avatar = 'null';
-        //     if($newUser->save())
-        //     {
-        //         return response()->json([
-        //             'status' => 200,
-        //             'message' => 'Register succesfully'
-        //         ]);
-        //     }else
-        //     {
-        //         return response()->json([
-        //             'status' => 400,
-        //             'message' => 'Register fail'
-        //         ]);
-        //     }
-        // }
-        if($newUser->save()){
-            return response()->json([
-                'status' => 200,
-                'message' => 'Register succesfully'
-            ]);
-        }else 
+        if(!empty($avatar))
         {
-            return response()->json([
-                            'status' => 400,
-                            'message' => 'Register fail'
-                        ]);
+            $data['avatar'] = $avatar->getClientOriginalName();
+            $avatar->move('upload/user/avatar',$avatar->getClientOriginalName());
+            $newUser->avatar = $data['avatar'];
+            if($newUser->save())
+            {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Register succesfully'
+                ]);
+            }else
+            {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Register fail'
+                ]);
+            }
+            
+        }else
+        {
+            $newUser->avatar = 'default.jpg';
+            if($newUser->save())
+            {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Register succesfully'
+                ]);
+            }else
+            {
+                return response()->json([
+                    'status' => 400,
+                    'message' => 'Register fail'
+                ]);
+            }
         }
+        // if($newUser->save()){
+        //     return response()->json([
+        //         'status' => 200,
+        //         'message' => 'Register succesfully'
+        //     ]);
+        // }else 
+        // {
+        //     return response()->json([
+        //                     'status' => 400,
+        //                     'message' => 'Register fail'
+        //                 ]);
+        // }
         
     }
 }
