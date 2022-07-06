@@ -2,12 +2,23 @@ import { Fragment } from 'react';
 import classNames from 'classnames/bind';
 import styles from './OptionPage.module.scss';
 import images from '../../../../assets/images';
-
+import firebase, {auth, db} from '../../../../firebase';
 
 const cx = classNames.bind(styles);
+const fbProvider = new firebase.auth.FacebookAuthProvider();
 
 function OptionPage({ handleSetPage }) {
-
+	const handleFacebookLogin = async ()=>{
+        const {additionalUserInfo, user} = await auth.signInWithPopup(fbProvider);
+        console.log(user.displayName);
+        /*if(additionalUserInfo.isNewUser == true) {
+            addDocument('users', {displayName: user.displayName,
+                email: user.email,
+                photoURL: user.photoURL,
+                uid: user.uid,
+                providerId: additionalUserInfo.providerId})
+        }*/
+    }
 
     return ( 
         <Fragment>
@@ -28,7 +39,7 @@ function OptionPage({ handleSetPage }) {
 				<img src={images.google} alt='Google' />
 				<span className={cx('optionContent')}>Tiếp tục với Google</span>
 			</button>
-			<button className={cx('btn-control')}>
+			<button className={cx('btn-control')} onClick={handleFacebookLogin}>
 				<img src={images.facebook} alt='facebook' />
 				<span className={cx('optionContent')}>
 					Tiếp tục với Facebook
