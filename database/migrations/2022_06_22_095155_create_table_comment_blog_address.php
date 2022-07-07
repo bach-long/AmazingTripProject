@@ -17,7 +17,6 @@ class CreateTableCommentBlogAddress extends Migration
             $table->id('comment_blog_id');
             $table->bigInteger('blog_address_id')->unsigned();
             $table->bigInteger('id_user')->unsigned();
-            $table->string('comment_address_image');
             $table->text('comment_address_content');
             $table->foreign('blog_address_id')->references('blog_address_id')->on('blog_address')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('id_user')->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');

@@ -2,36 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Models\BlogAddress;
+use App\Models\CommentBlogAddress;
+use App\Models\ReactionBlogAdress;
+use App\Models\User;
 
 class BlogAddressController extends Controller
 {
-    public function getBlogForAddress($address_id) {
-        $blogs = BlogAddress::where('address_id', $address_id)->get();
-        if($blogs){
-            return response()->json([
-                'data'=>$blogs,
-                'status'=>200,
-                'message'=>'blog for this address'
-            ]);
-        } else {
-            return response()->json([
-                'status'=>404,
-                'message'=>'doesnt exist'
-            ]);
-        }
-    }
-
-    public function getBlog()
+    public function getBlog(Request $req, $address_id)
     {
-        $blog = BlogAddress::all();
-        return response()->json([
-            'data' => $blog,
-            'status' => 200,
-            'message' => 'Get blog successfully'
-        ]);
+        $blog = BlogAddress::where('address_id', $address_id)->get();
+        foreach($blog as $i){
+            $user = User::where('id', $i->id_user)->first();
+            $i->nickname=$user->nickname;
+            $i->avatar=$user->avatar;
+            $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
+            $i->likeCount = ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
+            $i->dislikeCount=ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+        }
+            return response()->json([
+                'data' => $blog,
+                'status' => 200,
+                'message' => 'Get blog successfully'
+            ]);
     }
     public function postBlog(Request $req)
     {
@@ -41,7 +35,7 @@ class BlogAddressController extends Controller
             $blo->address_id = $req->input('address_id');
             $blo->blog_address_title = $req->input('blog_address_title');
             $blo->blog_address_image = $req->input('blog_address_image');
-            $blo->blog_content = $req->input('blog_content');
+            $blo->blog_address_content = $req->input('blog_address_content');
 
 
             $image = $req->blog_address_image;
@@ -55,8 +49,21 @@ class BlogAddressController extends Controller
 
 
             if($blo->save()){
+                $blog = BlogAddress::where('address_id', $req->address_id)->get();
+                foreach($blog as $i){
+                    $user = User::where('id', $i->id_user)->first();
+                    $i->nickname=$user->nickname;
+                    $i->avatar=$user->avatar;
+                    $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
+                    $i->likeCount = ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
+                    $i->dislikeCount=ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+                }   
+            return response()->json([
+                'data' => $blog,
+                'status' => 200,
+                'message' => 'Get blog successfully'
+            ]);
                 $blog = BlogAddress::all();
-            
                 return response()->json([
                     'data' => $blog,
                     'status' => 200,
@@ -75,8 +82,8 @@ class BlogAddressController extends Controller
                 'message' => 'Post data fail'
             ]);
         }
-        
-        
+
+
     }
     public function editBlog(Request $req , $id)
     {
@@ -88,7 +95,6 @@ class BlogAddressController extends Controller
             $item->blog_address_image = $req->input('blog_address_image');
             $item->blog_address_content = $req->input('blog_address_content');
             if($item->save()){
-                
                 return response()->json([
                     'data' => $item,
                     'status' => 200,
@@ -117,7 +123,7 @@ class BlogAddressController extends Controller
                     'data' => $blog,
                     'status' => 200,
                     'message' => 'Delete blog address successfully'
-                ]); 
+                ]);
             }else{
                 return response()->json([
                     'status' => 400,

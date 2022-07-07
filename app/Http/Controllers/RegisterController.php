@@ -22,7 +22,7 @@ class RegisterController extends Controller
             }
             if($checkEmail){
                 return response()->json([
-                    'status' => 400,
+                    'status' => 401,
                     'data'=>$checkEmail,
                     'data2'=>$checkPhone,
                     'message' => 'Email already exists'
@@ -31,17 +31,17 @@ class RegisterController extends Controller
             if($checkPhone)
             {
                 return response()->json([
-                    'status' => 400,
+                    'status' => 402,
                     'data'=>$checkPhone,
                     'data2'=>$checkEmail,
                     'message' => 'Phone already exists'
                 ]);
             }
-            
+
             else{
                 $newUser = new User();
                 $data = $request->all();
-                
+
                 $newUser->username = $request->username;
                 $newUser->password = bcrypt($request->password);
                 $newUser->email = $request->email;
@@ -50,12 +50,29 @@ class RegisterController extends Controller
                 $newUser->nickname = $request->nickname;
                 $newUser->birthday = $request->birthday;
                 $newUser->role = $request->role;
-                $avatar = $request->avatar;
-                if(!empty($avatar))
-                {
-                    $data['avatar'] = $avatar->getClientOriginalName();
-                    $avatar->move('upload/user/avatar',$avatar->getClientOriginalName());
-                    $newUser->avatar = $data['avatar'];
+                $newUser->avatar = $request->avatar;
+//                if(!empty($avatar))
+//                {
+//                    $data['avatar'] = $avatar->getClientOriginalName();
+//                    $avatar->move('upload/user/avatar',$avatar->getClientOriginalName());
+//                    $newUser->avatar = $data['avatar'];
+//                    if($newUser->save())
+//                    {
+//                        return response()->json([
+//                            'status' => 200,
+//                            'message' => 'Register succesfully'
+//                        ]);
+//                    }else
+//                    {
+//                        return response()->json([
+//                            'status' => 400,
+//                            'message' => 'Register fail'
+//                        ]);
+//                    }
+//
+//                }else
+//                {
+//                    $newUser->avatar = 'default.jpg';
                     if($newUser->save())
                     {
                         return response()->json([
@@ -69,24 +86,7 @@ class RegisterController extends Controller
                             'message' => 'Register fail'
                         ]);
                     }
-                    
-                }else
-                {
-                    $newUser->avatar = 'default.jpg';
-                    if($newUser->save())
-                    {
-                        return response()->json([
-                            'status' => 200,
-                            'message' => 'Register succesfully'
-                        ]);
-                    }else
-                    {
-                        return response()->json([
-                            'status' => 400,
-                            'message' => 'Register fail'
-                        ]);
-                    }
-                }
+                //}
             }
         }else{
             return response()->json([
@@ -94,6 +94,5 @@ class RegisterController extends Controller
                 'message' => 'Data fail'
             ]);
         }
-        
     }
 }

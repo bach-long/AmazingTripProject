@@ -9,9 +9,9 @@ class CommentBlogAddress extends Model
 {
     use HasFactory;
     protected $table = 'comment_blog_address';
-    protected $primaryKey = 'comment_address_id';
+    protected $primaryKey = 'comment_blog_id';
     protected $filltable=[
-        'comment_address_id',
+        'comment_blog_id',
         'blog_address_id',
         'id_user',
         'comment_address_image',

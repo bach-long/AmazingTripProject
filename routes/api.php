@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\BlogAddressController;
+use App\Http\Controllers\CommentBlogAddressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BlogController;
@@ -35,22 +36,27 @@ Route::get('/profile/{id}',[UserController::class,'getProfile']);
 
 Route::get('/address',[AddressController::class,'getAddress']);
 Route::post('/address',[AddressController::class,'postAddress']);
+Route::get('/address/{id}',[AddressController::class,'getEachAddress']);
 Route::post('/address/{id}',[AddressController::class,'editAddress']);
 Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
 
 Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']);
+
+// blog Address
+Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
+Route::post('/blogAddress',[BlogAddressController::class,'postBlog']);
 
 Route::get('/blog',[BlogController::class,'getBlog']);
 Route::post('/blog',[BlogController::class,'postBlog']);
 Route::patch('/blog/{id}',[BlogController::class,'editBlog']);
 Route::delete('/blog/{id}',[BlogController::class,'deleteBlog']);
 
-Route::get('/getBookmark/{id_user}',[BookmarkController::class,'getBookmark']);
+Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
 Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 
 Route::get('/group',[GroupController::class,'getGroup']);
-Route::get('/group/{id}',[GroupController::class,'showGroup']) ; // show detail 1 group 
+Route::get('/group/{id}',[GroupController::class,'showGroup']) ; // show detail 1 group
 Route::post('/group',[GroupController::class,'postGroup']);
 Route::patch('/group/{id}',[GroupController::class,'editGroup']);
 Route::delete('/group/{id}',[GroupController::class,'deleteGroup']);
@@ -64,14 +70,11 @@ Route::post('/discount',[DiscountController::class,'postDiscount']);
 Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
 
-Route::post('/createCommentBlog',[CommentBlogController::class, 'creatCommentBlog']);
-Route::get('/commentsBlog/{blog_id}',[CommentBlogController::class, 'getAllCommentBlog']);
-Route::patch('/editCommentBlog',[CommentBlogController::class, 'editCommentBlog']);
-Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogController::class, 'deleteCommentBlog']);
-Route::post('/reactBlog',[BlogReactionController::class, 'reactionBlogUpdate']);
-Route::post('/reactBlogAddress',[BlogReactionController::class, 'reactionBlogAddressUpdate']);
+Route::post('/createCommentBlog',[CommentBlogAddressController::class, 'createCommentBlog']);
+Route::get('/commentsBlog/{blog_id}',[CommentBlogAddressController::class, 'getAllCommentBlog']);
+Route::patch('/editCommentBlog',[CommentBlogAddressController::class, 'editCommentBlog']);
+Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressController::class, 'deleteCommentBlog']);
+Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 
-Route::post('/CreateGroupForm',[CreateGroupFormController::class,'CreateGroup']);
-
-Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);
+//Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);
 

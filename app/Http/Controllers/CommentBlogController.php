@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
 use App\Models\CommentBlog;
+use App\Models\User;
 
 class CommentBlogController extends Controller
 {
     //
     public function getAllCommentBlog ($blog_id){
-
+        $comments = CommentBlog::where('blog_address_id', $blog_id)->get();
+        foreach($comments as $comment){
+            $commenter = User::where('id', $comment->id_user)->first();
+            $comment->nickname=$commenter->nickname;
+            $comment->avatar=$commenter->avatar;
+        }
         return response()->json([
-            'data'=> CommentBlog::where('blog_id', $blog_id)->get(),
-            'count'=> CommentBlog::where('blog_id', $blog_id)->count(),
+            'data'=> $comments,
             'status'=>200,
             'message'=>'all comments'
         ]);
@@ -24,17 +28,22 @@ class CommentBlogController extends Controller
         $comment->blog_id=$request->blog_id;
         $comment->id_user=$request->id_user;
         $comment->bomment_blog_content= $request->comment_blog_content;
+        $comments = CommentBlog::where('blog_address_id', $request->blog_id)->get();
+        foreach($comments as $comment){
+            $commenter = User::where('id', $comment->id_user)->first();
+            $comment->nickname=$commenter->nickname;
+            $comment->avatar=$commenter->avatar;
+        }
+        
         if($comment->save()){
             return response()->json([
-                'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
+                'data'=> $comments,
                 'status'=>200,
                 'message'=>'comment success'
             ]);
         } else {
             return response()->json([
-                'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
+                'data'=> $comments,
                 'status'=>400,
                 'message'=>'comment failed'
             ]);
@@ -44,26 +53,28 @@ class CommentBlogController extends Controller
     public function editCommentBlog(Request $request){
         $comment = CommentBlog::find($request->comment_blog_id);
         if($comment){
+            $comments = CommentBlog::where('blog_address_id', $request->blog_id)->get();
+            foreach($comments as $comment){
+                $commenter = User::where('id', $comment->id_user)->first();
+                $comment->nickname=$commenter->nickname;
+                $comment->avatar=$commenter->avatar;
+            }
             $comment->comment_blog_content = $request->comment_blog_content;
             if($comment->save()){
                 return response()->json([
-                    'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                    'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
+                    'data'=> $comments,
                     'status'=>200,
                     'message'=>'comment edited'
                 ]);
             } else {
                 return response()->json([
-                    'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                    'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
+                    'data'=> $comments,
                     'status'=>400,
                     'message'=>'edit failed'
                 ]);
             }
         } else {
             return response()->json([
-                'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
                 'status'=>404,
                 'message'=>'doesnt exist'
             ]);
@@ -74,24 +85,32 @@ class CommentBlogController extends Controller
         $comment = CommentBlog::find($request->comment_blog_id);
         if($comment){
             if($comment->delete()){
+                $comments = CommentBlog::where('blog_address_id', $request->blog_id)->get();
+                foreach($comments as $comment){
+                    $commenter = User::where('id', $comment->id_user)->first();
+                    $comment->nickname=$commenter->nickname;
+                    $comment->avatar=$commenter->avatar;
+                }
                 return response()->json([
-                    'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                    'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
+                    'data'=> $comments,
                     'status'=>200,
                     'message'=>'deleted'
                 ]);
             } else {
+                $comments = CommentBlog::where('blog_address_id', $request->blog_id)->get();
+                foreach($comments as $comment){
+                    $commenter = User::where('id', $comment->id_user)->first();
+                    $comment->nickname=$commenter->nickname;
+                    $comment->avatar=$commenter->avatar;
+                }
                 return response()->json([
-                    'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                    'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
+                    'data'=> $comments,
                     'status'=>400,
                     'message'=>'cant delete'
                 ]);
             }
         } else {
             return response()->json([
-                'data'=> CommentBlog::where('blog_id', $request->blog_id)->get(),
-                'count'=> CommentBlog::where('blog_id', $request->blog_id)->count(),
                 'status'=>404,
                 'message'=>'doesnt exist'
             ]);

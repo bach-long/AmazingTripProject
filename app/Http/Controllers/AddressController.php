@@ -16,24 +16,6 @@ class AddressController extends Controller
             'message' => 'Get address successfully'
         ]);
     }
-    
-    public function getAddressById($id){
-        $address = Address::find($id);
-        if($address){
-            return response()->json([
-                'data' => $address,
-                'status' => 200,
-                'message' => 'Get address successfully'
-            ]);
-        } else {
-            return response()->json([
-                'data' => $id,
-                'status' => 404,
-                'message' => 'doesnt exist'
-            ]);
-        }
-    }
-
     public function postAddress(Request $req)
     {
         if($req){
@@ -46,7 +28,6 @@ class AddressController extends Controller
 
             if($add->save()){
                 $address = Address::all();
-            
                 return response()->json([
                     'data' => $address,
                     'status' => 200,
@@ -65,9 +46,29 @@ class AddressController extends Controller
                 'message' => 'Post address fail'
             ]);
         }
-        
-        
+
+
     }
+
+
+    public function getEachAddress(Request $req , $id)
+    {
+        $item = Address::find($id);
+        if($req){
+            return response()->json([
+                'data' => $item,
+                'status' => 200,
+                'message' => 'Founded address successfully'
+            ]);
+        }else{
+            return response()->json([
+                'status' => 400,
+                'message' => 'Address not found'
+            ]);
+        }
+    }
+
+
     public function editAddress(Request $req , $id)
     {
         $item = Address::find($id);
@@ -78,7 +79,6 @@ class AddressController extends Controller
             $item->address_image = $req->input('address_image');
             $item->address_map = $req->input('address_map');
             if($item->save()){
-                
                 return response()->json([
                     'data' => $item,
                     'status' => 200,
@@ -102,7 +102,7 @@ class AddressController extends Controller
                     'data' => $address,
                     'status' => 200,
                     'message' => 'Delete address successfully'
-                ]); 
+                ]);
             }else{
                 return response()->json([
                     'status' => 400,
@@ -122,7 +122,7 @@ class AddressController extends Controller
                     'data' => $result,
                     'status' => 200,
                     'message' => 'Get address by id host'
-                ]); 
+                ]);
             }else{
                 return response()->json([
                     'status' => 400,
@@ -137,5 +137,4 @@ class AddressController extends Controller
         }
     }
 
-        
 }
