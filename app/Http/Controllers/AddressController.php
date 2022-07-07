@@ -16,6 +16,24 @@ class AddressController extends Controller
             'message' => 'Get address successfully'
         ]);
     }
+    
+    public function getAddressById($id){
+        $address = Address::find($id);
+        if($address){
+            return response()->json([
+                'data' => $address,
+                'status' => 200,
+                'message' => 'Get address successfully'
+            ]);
+        } else {
+            return response()->json([
+                'data' => $id,
+                'status' => 404,
+                'message' => 'doesnt exist'
+            ]);
+        }
+    }
+
     public function postAddress(Request $req)
     {
         if($req){

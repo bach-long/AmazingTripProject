@@ -45,7 +45,7 @@ Route::post('/blog',[BlogController::class,'postBlog']);
 Route::patch('/blog/{id}',[BlogController::class,'editBlog']);
 Route::delete('/blog/{id}',[BlogController::class,'deleteBlog']);
 
-Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
+Route::get('/getBookmark/{id_user}',[BookmarkController::class,'getBookmark']);
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
 Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 
@@ -68,7 +68,8 @@ Route::post('/createCommentBlog',[CommentBlogController::class, 'creatCommentBlo
 Route::get('/commentsBlog/{blog_id}',[CommentBlogController::class, 'getAllCommentBlog']);
 Route::patch('/editCommentBlog',[CommentBlogController::class, 'editCommentBlog']);
 Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogController::class, 'deleteCommentBlog']);
-Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
+Route::post('/reactBlog',[BlogReactionController::class, 'reactionBlogUpdate']);
+Route::post('/reactBlogAddress',[BlogReactionController::class, 'reactionBlogAddressUpdate']);
 
 Route::post('/CreateGroupForm',[CreateGroupFormController::class,'CreateGroup']);
 

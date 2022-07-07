@@ -7,14 +7,21 @@ use App\Models\FormRegister;
 
 class FormRegisterController extends Controller
 {
-    public function getFormRegister()
+    public function getRegisterListForAddress($address_id)
     {
-        $form = FormRegister::all();
-        return response()->json([
-            'data' =>  $form,
-            'status' => 200,
-            'message' => 'Get follow successfully'
-        ]);
+        $list = FormRegister::where('address_id', $address_id)->get();
+        if($list) {
+            return response()->json([
+                'data' =>  $list,
+                'status' => 200,
+                'message' => 'Get follow successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'doesnt exist'
+            ]);
+        }
     }
     public function postFormRegister(Request $req)
     {

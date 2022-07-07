@@ -7,9 +7,9 @@ use App\Models\Bookmark;
 
 class BookmarkController extends Controller
 {
-    public function getBookmark()
+    public function getBookmark($id_user)
     {
-        $bookmark = Bookmark::all();
+        $bookmark = Bookmark::where('id_user', $id_user)->get();
         return response()->json([
             'data' =>  $bookmark,
             'status' => 200,
@@ -20,49 +20,53 @@ class BookmarkController extends Controller
     {
         if($req){
             $book =  new Bookmark();
-            $book->bookmark_id = $req->input('bookmark_id');
             $book->address_id = $req->input('address_id');
             $book->id_user = $req->input('id_user');
             if($book->save()){
-                $bookmark = Bookmark::all();
                 return response()->json([
-                    'data' => $bookmark,
+                    'data' => 1, //1 for +, 0 for -
                     'status' => 200,
-                    'message' => 'Post bookmark successfully'
+                    'message' => 'Bookmark successfully'
                 ]);
             }else{
                 return response()->json([
-                    'data' => $book,
+                    'data' => 0,
                     'status' => 400,
-                    'message' => 'Post bookmark fail'
+                    'message' => 'Bookmark failed'
                 ]);
             }
         }else{
             return response()->json([
-                'status' => 400,
-                'message' => 'Post bookmark fail'
+                'status' => 404,
+                'message' => 'doesnt exist'
             ]);
         }
-        
-        
     }
     
-    public function deleteBookmark($id)
+    public function deleteBookmark(Request $req)
     {
-        if(Bookmark::find($id)){
-            if(Bookmark::find($id)->delete()){
-                $bookmark = Bookmark::all();
+        $bookmark = Bookmark::where('id_user', $req->id_user)->where('address_id', $req->address_id)->first();
+        if($bookmark){
+            if($bookmark->delete()){
+                $data = Bookmark::where('id_user', $req->id_user)->get();
                 return response()->json([
-                    'data' => $bookmark,
+                    'data' => $data,
                     'status' => 200,
                     'message' => 'Delete bookmark successfully'
                 ]); 
             }else{
                 return response()->json([
+                    'data'=> Bookmark::where('id_user', $req->id_user)->get(),
                     'status' => 400,
                     'message' => 'Delete bookmark fail'
                 ]);
             }
+        } else {
+            return response()->json([
+                'data'=>Bookmark::where('id_user', $req->id_user)->get(),
+                'status' => 404,
+                'message' => 'doesnt exist'
+            ]);
         }
     }
 }

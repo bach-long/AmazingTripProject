@@ -2,11 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Models\BlogAddress;
 
 class BlogAddressController extends Controller
 {
+    public function getBlogForAddress($address_id) {
+        $blogs = BlogAddress::where('address_id', $address_id)->get();
+        if($blogs){
+            return response()->json([
+                'data'=>$blogs,
+                'status'=>200,
+                'message'=>'blog for this address'
+            ]);
+        } else {
+            return response()->json([
+                'status'=>404,
+                'message'=>'doesnt exist'
+            ]);
+        }
+    }
+
     public function getBlog()
     {
         $blog = BlogAddress::all();
