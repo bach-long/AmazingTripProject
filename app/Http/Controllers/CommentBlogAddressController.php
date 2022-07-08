@@ -53,13 +53,13 @@ class CommentBlogAddressController extends Controller
     public function editCommentBlog(Request $request){
         $comment = CommentBlogAddress::find($request->comment_blog_id);
         if($comment){
+            $comment->comment_address_content = $request->comment_blog_content;
             $comments = CommentBlogAddress::where('blog_address_id', $request->blog_id)->get();
-            foreach($comments as $comment){
+            foreach($comments as $cmt){
                 $commenter = User::where('id', $comment->id_user)->first();
-                $comment->nickname=$commenter->nickname;
-                $comment->avatar=$commenter->avatar;
+                $cmt->nickname=$commenter->nickname;
+                $cmt->avatar=$commenter->avatar;
             }
-            $comment->comment_blog_content = $request->comment_blog_content;
             if($comment->save()){
                 return response()->json([
                     'data'=> $comments,
@@ -86,10 +86,10 @@ class CommentBlogAddressController extends Controller
         if($comment){
             if($comment->delete()){
                 $comments = CommentBlogAddress::where('blog_address_id', $request->blog_id)->get();
-                foreach($comments as $comment){
+                foreach($comments as $cmt){
                     $commenter = User::where('id', $comment->id_user)->first();
-                    $comment->nickname=$commenter->nickname;
-                    $comment->avatar=$commenter->avatar;
+                    $cmt->nickname=$commenter->nickname;
+                    $cmt->avatar=$commenter->avatar;
                 }
                 return response()->json([
                     'data'=> $comments,
@@ -98,10 +98,10 @@ class CommentBlogAddressController extends Controller
                 ]);
             } else {
                 $comments = CommentBlogAddress::where('blog_address_id', $request->blog_id)->get();
-                foreach($comments as $comment){
+                foreach($comments as $cmt){
                     $commenter = User::where('id', $comment->id_user)->first();
-                    $comment->nickname=$commenter->nickname;
-                    $comment->avatar=$commenter->avatar;
+                    $cmt->nickname=$commenter->nickname;
+                    $cmt->avatar=$commenter->avatar;
                 }
                 return response()->json([
                     'data'=> $comments,
