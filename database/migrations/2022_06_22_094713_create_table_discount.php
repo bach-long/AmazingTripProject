@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableDidcount extends Migration
+class CreateTableDiscount extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateTableDidcount extends Migration
     {
         Schema::create('discount', function (Blueprint $table) {
             $table->id('discount_id');
-            $table->bigInteger('address_id')->unsigned();
+            $table->bigInteger('address_id')->unsigned()->unique();
             $table->date('time_start');
             $table->date('time_finish');
             $table->double('discount_rate');

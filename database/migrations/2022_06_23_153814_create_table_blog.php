@@ -22,8 +22,13 @@ class CreateTableBlog extends Migration
             $table->longText('blog_content')->notnull();
             $table->timestamps();
 
-            $table->foreign('id_user','group_id')
-                  ->references('id','group_id')->on('user_travel','group')
+            $table->foreign('id_user')
+                  ->references('id')->on('user_travel')
+                  ->onDelete('CASCADE')
+                  ->onUpdate('CASCADE');
+
+            $table->foreign('group_id')
+                  ->references('group_id')->on('group')
                   ->onDelete('CASCADE')
                   ->onUpdate('CASCADE');
         });

@@ -31,7 +31,7 @@ Route::get('/address',[AddressController::class,'getAddress']);
 Route::post('/address',[AddressController::class,'postAddress']);
 Route::patch('/address/{id}',[AddressController::class,'editAddress']);
 Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
-Route::get('/listAddress',[AddressController::class,'getListAddress']);
+//Route::get('/listAddress',[AddressController::class,'getListAddress']);
 Route::get('/address/{id}',[AddressController::class,'getAddressbyId']);
 
 Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']);
@@ -47,9 +47,10 @@ Route::get('/blogaddress/{id}',[BlogAddressController::class,'showBlogAddress'])
 Route::patch('/blogaddress/{id}',[BlogAddressController::class,'editBlog']);
 Route::delete('/blogaddress/{id}',[BlogAddressController::class,'deleteBlog']);
 
-Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
+Route::get('/bookmark/user={id_user}',[BookmarkController::class,'getBookmarkById_User']);  // get bookmark by each user
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
-Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
+Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmarkbyAddress_id']);   // delete 1 saved address
+//Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
 
 Route::get('/group',[GroupController::class,'getGroup']);
 Route::get('/group/{id}',[GroupController::class,'showGroup']) ; // show detail 1 group 
@@ -66,6 +67,7 @@ Route::post('/discount',[DiscountController::class,'postDiscount']);
 Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
 
-Route::post('/CreateGroupForm',[CreateGroupFormController::class,'CreateGroup']);
+Route::get('/discount/address/{address_id}',[DiscountController::class,'getFormRegister']);  // get discount information at address Page
+
 
 Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);

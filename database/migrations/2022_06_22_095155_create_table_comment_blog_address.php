@@ -14,7 +14,7 @@ class CreateTableCommentBlogAddress extends Migration
     public function up()
     {
         Schema::create('comment_blog_address', function (Blueprint $table) {
-            $table->id('comment_blog_id');
+            $table->id('comment_blog_address_id');
             $table->bigInteger('blog_address_id')->unsigned();
             $table->bigInteger('id_user')->unsigned();
             $table->text('comment_address_content');

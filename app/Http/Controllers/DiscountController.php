@@ -16,6 +16,7 @@ class DiscountController extends Controller
             'message' => 'Get follow successfully'
         ]);
     }
+
     public function postDiscount(Request $req)
     {
         if($req){
@@ -96,5 +97,24 @@ class DiscountController extends Controller
                 ]);
             }
         }
+    }
+
+    // get form register at address
+    public function getFormRegister($address_id){
+        $discount= Discount::where('address_id',$address_id)->get();
+
+        if($discount){
+            return response()->json([
+                'data'=>$discount,
+                'status'=>200,
+                'message'=>'get discount form successfull'
+            ]);
+        }else{
+            return response()->json([
+                'status'=>404,
+                'message'=>'no discount for  had found'
+            ]);
+        }
+
     }
 }

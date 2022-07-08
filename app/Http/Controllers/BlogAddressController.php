@@ -40,7 +40,7 @@ class BlogAddressController extends Controller
             $blo->address_id = $req->input('address_id');
             $blo->blog_address_vote = $req->input('blog_address_vote');
             $blo->blog_address_image = $req->input('blog_address_image');
-            $blo->blog_content = $req->input('blog_content');
+            $blo->blog_address_content = $req->input('blog_address_content');
 
             // $image = $req->blog_address_image;
             // if(!empty($image))

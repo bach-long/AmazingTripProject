@@ -18,7 +18,7 @@ class CreateTableReactionBlogAddress extends Migration
             $table->bigInteger('blog_address_id')->unsigned();
             $table->bigInteger('id_user')->unsigned();
             $table->integer('reaction')->comment='0:dislike 1:like';
-            $table->integer('reaction_blog_status')->default(1)->comment='1: exist  0: deleted';
+            //$table->integer('reaction_blog_status')->default(1)->comment='1: exist  0: deleted';
             $table->foreign('blog_address_id')->references('blog_address_id')->on('blog_address')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('id_user')->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();

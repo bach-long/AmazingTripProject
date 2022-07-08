@@ -8,6 +8,8 @@ use App\Models\Travel;
 use App\Models\Address;
 use App\Models\BlogAddress;
 use App\Models\Group;
+use App\Models\Bookmark;
+use App\Models\Discount;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -20,7 +22,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(UserSeeder::class);
         $this->call(AddressSeeder::class);
-      //  $this->call(BlogAddressSeeder::class);
+        $this->call(BlogAddressSeeder::class);
         $this->call(GroupSeeder::class);
+        $this->call(Bookmark::class);
+        $this->call(Discount::class);
     }
 }
