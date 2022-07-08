@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FormRegister;
+use App\Models\User;
 
 class FormRegisterController extends Controller
 {
@@ -11,6 +12,11 @@ class FormRegisterController extends Controller
     {
         $list = FormRegister::where('address_id', $address_id)->get();
         if($list) {
+            foreach($list as $i){
+                $user = User::where('id', $i->id_user)->first();
+                $i->nickname=$user->nickname;
+                $i->avatar=$user->avatar;
+            }
             return response()->json([
                 'data' =>  $list,
                 'status' => 200,
@@ -31,7 +37,12 @@ class FormRegisterController extends Controller
             $form->id_user = $req->input('id_user');
             $form->quantity_registed = $req->input('quantity_registed');
             if($form->save()){
-                $data = FormRegister::all();
+                $data = FormRegister::where('address_id', $req->address_id)->get();
+                foreach($data as $i){
+                    $user = User::where('id', $i->id_user)->first();
+                    $i->nickname=$user->nickname;
+                    $i->avatar=$user->avatar;
+                }
                 return response()->json([
                     'data' => $data,
                     'status' => 200,
@@ -58,7 +69,6 @@ class FormRegisterController extends Controller
         if($req){
             $item->quantity_registed = $req->input('quantity_registed');
             if($item->save()){
-                
                 return response()->json([
                     'data' => $item,
                     'status' => 200,
@@ -79,11 +89,16 @@ class FormRegisterController extends Controller
 
     }
     
-    public function deleteFormRegister($id)
+    public function deleteFormRegister($req)
     {
-        if(FormRegister::find($id)){
-            if(FormRegister::find($id)->delete()){
-                $data = FormRegister::all();
+        if(FormRegister::find($req->id)){
+            if(FormRegister::find($req->id)->delete()){
+                $data = FormRegister::where('address_id', $req->address_id)->get();
+                foreach($data as $i){
+                    $user = User::where('id', $i->id_user)->first();
+                    $i->nickname=$user->nickname;
+                    $i->avatar=$user->avatar;
+                }
                 return response()->json([
                     'data' => $data,
                     'status' => 200,

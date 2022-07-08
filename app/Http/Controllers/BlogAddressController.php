@@ -58,12 +58,6 @@ class BlogAddressController extends Controller
                     $i->likeCount = ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
                     $i->dislikeCount=ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
                 }   
-            return response()->json([
-                'data' => $blog,
-                'status' => 200,
-                'message' => 'Get blog successfully'
-            ]);
-                $blog = BlogAddress::all();
                 return response()->json([
                     'data' => $blog,
                     'status' => 200,
@@ -78,12 +72,10 @@ class BlogAddressController extends Controller
             }
         }else{
             return response()->json([
-                'status' => 400,
+                'status' => 404,
                 'message' => 'Post data fail'
             ]);
         }
-
-
     }
     public function editBlog(Request $req , $id)
     {

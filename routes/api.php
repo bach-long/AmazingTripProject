@@ -12,7 +12,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\BlogReactionController;
-
+use App\Http\Controllers\FormRegisterController;
 use App\Http\Controllers\LoginControler;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
@@ -76,5 +76,9 @@ Route::patch('/editCommentBlog',[CommentBlogAddressController::class, 'editComme
 Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressController::class, 'deleteCommentBlog']);
 Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 
+Route::get('/getRegisters/address_id',[FormRegisterController::class, 'getRegisterListForAddress']);
+Route::post('/createForm',[FormRegisterController::class, 'postFormRegister']);
+Route::patch('/editForm/{id}',[FormRegisterController::class, 'editFormRegister']);
+Route::delete('/deleteForm',[FormRegisterController::class, 'deleteFormRegister']);
 //Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);
 
