@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Discount; 
-
+use App\Models\FormRegister;
 class DiscountController extends Controller
 {
     public function getDiscount()
@@ -26,7 +26,7 @@ class DiscountController extends Controller
             $discount->time_finish = $req->input('time_finish');
             $discount->discount_rate = $req->input('discount_rate');
             $discount->discount_quantity = $req->input('discount_quantity');
-            $discount->number_registed = $req->input('number_registed');
+           // $discount->number_registed = $req->input('number_registed');
             if($discount->save()){
                 $data = Discount::all();
                 return response()->json([
@@ -100,21 +100,32 @@ class DiscountController extends Controller
     }
 
     // get form register at address
-    public function getFormRegister($address_id){
-        $discount= Discount::where('address_id',$address_id)->get();
-
+    public function getFormDiscount($address_id){
+        $discount= Discount::where('address_id',$address_id)->first();
         if($discount){
-            return response()->json([
-                'data'=>$discount,
-                'status'=>200,
-                'message'=>'get discount form successfull'
-            ]);
-        }else{
+            $registers=FormRegister::where('discount_id',$discount->discount_id)->get();
+            foreach($registers as $register){
+                $discount->number_registed += $register->quantity_registed;
+            }
+    
+            if($discount->save()){
+                return response()->json([
+                    'data'=>$discount,
+                    'status'=>200,
+                    'message'=>'get discount form successfull'
+                ]);
+            }else{
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'no discount for  had found'
+                ]);
+            }
+        }
+        else{
             return response()->json([
                 'status'=>404,
                 'message'=>'no discount for  had found'
             ]);
         }
-
     }
 }

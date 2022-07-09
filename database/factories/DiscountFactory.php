@@ -17,7 +17,7 @@ class DiscountFactory extends Factory
     public function definition()
     {
         return [
-            'address_id'=>$this->faker->unique()->numberBetween(1,10),
+            'address_id'=>$this->faker->unique()->numberBetween(1,20),
             'time_start'=>$this->faker->date($format = 'Y-m-d', $max = '2010-01-09'),
             'time_finish'=>$this->faker->date($format='Y-m-d',$min='2010-01-09'),
             'discount_rate'=>$this->faker->numberBetween(1,99),

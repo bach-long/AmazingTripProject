@@ -10,6 +10,7 @@ use App\Models\BlogAddress;
 use App\Models\Group;
 use App\Models\Bookmark;
 use App\Models\Discount;
+use App\Models\FormRegister;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -26,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupSeeder::class);
         $this->call(Bookmark::class);
         $this->call(Discount::class);
+        $this->call(FormRegister::class);
     }
 }

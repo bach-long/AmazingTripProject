@@ -22,7 +22,7 @@ class CreateTableFormRegisted extends Migration
             $table->foreign('id_user')->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
 
-        });
+        }); 
     }
 
     /**

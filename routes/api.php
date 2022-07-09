@@ -62,12 +62,12 @@ Route::get('/follow',[FollowController::class,'getFollow']);
 Route::post('/follow',[FollowController::class,'postFollow']);
 Route::delete('/follow/{id}',[FollowController::class,'deleteFollow']);
 
-Route::get('/discount',[DiscountController::class,'getDiscount']);
+Route::get('/discount',[DiscountController::class,'getDiscount']);             // get all discount form
 Route::post('/discount',[DiscountController::class,'postDiscount']);
 Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
 
-Route::get('/discount/address/{address_id}',[DiscountController::class,'getFormRegister']);  // get discount information at address Page
+Route::get('/discount/address={address_id}',[DiscountController::class,'getFormDiscount']);  // get discount information at address Page
 
 
 Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);
