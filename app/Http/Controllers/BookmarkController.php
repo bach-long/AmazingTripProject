@@ -22,14 +22,18 @@ class BookmarkController extends Controller
     */
 
     public function getBookmarkById_User($id_user){
-       $bookmark = Bookmark::where('id_user',$id_user)->paginate(6);
-     // $bookmark = Bookmark::where('id_user',$id_user);
-        if($bookmark){
+       //$bookmark = Bookmark::where('id_user',$id_user)->paginate(6);
+        $bookmarks = Bookmark::where('id_user',$id_user)->orderBy('created_at')->get();
+       
+        if($bookmarks){
             // if have some saved address
+            foreach($bookmarks as $bookmark){
+                $address=Address::where('address_id',$bookmark->address_id)->get();
+            }
             return response()->json([
               // 'data'=> Address::where('address_id',each($bookmark)->address_id)->get()->paginate(6),
               // 'type'=>$type,
-                 'data'=>$bookmark,
+                 'data'=>$address,
                  'status'=>200,
                  'message'=>'get bookmark by id_user oke'
             ]);
