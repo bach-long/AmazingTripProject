@@ -103,11 +103,13 @@ class DiscountController extends Controller
     public function getFormDiscount($address_id){
         $discount= Discount::where('address_id',$address_id)->first();
         if($discount){
+            
             $registers=FormRegister::where('discount_id',$discount->discount_id)->get();
             foreach($registers as $register){
                 $discount->number_registed += $register->quantity_registed;
             }
-    
+            
+            //$discount->number_registed= FormRegister::where('discount_id',$discount->discount_id)->count('quantity_registed');
             if($discount->save()){
                 return response()->json([
                     'data'=>$discount,

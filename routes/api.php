@@ -71,3 +71,5 @@ Route::get('/discount/address={address_id}',[DiscountController::class,'getFormD
 
 
 Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);
+
+Route::get('/host/{id_host}',[UserController::class,'getHostInfo']);
