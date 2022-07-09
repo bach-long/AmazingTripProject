@@ -10,7 +10,7 @@ class CommentBlogAddressController extends Controller
 {
     //
     public function getAllCommentBlog ($blog_id){
-        $comments = CommentBlogAddress::where('blog_address_id', $blog_id)->get();
+        $comments = CommentBlogAddress::where('blog_address_id', $blog_id)->orderBy('created_at', 'desc')->get();
         foreach($comments as $comment){
             $commenter = User::where('id', $comment->id_user)->first();
             $comment->nickname=$commenter->nickname;
@@ -23,19 +23,20 @@ class CommentBlogAddressController extends Controller
         ]);
     }
 
-    public function createCommentBlog(Request $request){
+    public function createCommentBlog(Request $request, $blog_address_id){
         $comment = new CommentBlogAddress();
-        $comment->blog_id=$request->blog_id;
+        $comment->blog_address_id=$request->blog_address_id;
         $comment->id_user=$request->id_user;
-        $comment->bomment_blog_content= $request->comment_blog_content;
-        $comments = CommentBlogAddress::where('blog_address_id', $request->blog_id)->get();
+        $comment->comment_address_content= $request->comment_address_content;
+        $check = $comment->save();
+        $comments = CommentBlogAddress::where('blog_address_id', $blog_address_id)->orderBy('created_at', 'desc')->get();
         foreach($comments as $comment){
             $commenter = User::where('id', $comment->id_user)->first();
             $comment->nickname=$commenter->nickname;
             $comment->avatar=$commenter->avatar;
         }
-        
-        if($comment->save()){
+
+        if($check){
             return response()->json([
                 'data'=> $comments,
                 'status'=>200,
@@ -78,7 +79,7 @@ class CommentBlogAddressController extends Controller
                 'status'=>404,
                 'message'=>'doesnt exist'
             ]);
-        } 
+        }
     }
 
     public function deleteCommentBlog(Request $request) {

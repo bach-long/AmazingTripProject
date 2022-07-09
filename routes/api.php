@@ -45,6 +45,7 @@ Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']
 // blog Address
 Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
 Route::post('/blogAddress',[BlogAddressController::class,'postBlog']);
+Route::delete('/blogAddress/{id}',[BlogAddressController::class,'deleteBlog']);
 
 Route::get('/blog',[BlogController::class,'getBlog']);
 Route::post('/blog',[BlogController::class,'postBlog']);
@@ -70,7 +71,7 @@ Route::post('/discount',[DiscountController::class,'postDiscount']);
 Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
 
-Route::post('/createCommentBlog',[CommentBlogAddressController::class, 'createCommentBlog']);
+Route::post('/createCommentBlog/{blog_id}',[CommentBlogAddressController::class, 'createCommentBlog']);
 Route::get('/commentsBlog/{blog_id}',[CommentBlogAddressController::class, 'getAllCommentBlog']);
 Route::patch('/editCommentBlog',[CommentBlogAddressController::class, 'editCommentBlog']);
 Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressController::class, 'deleteCommentBlog']);

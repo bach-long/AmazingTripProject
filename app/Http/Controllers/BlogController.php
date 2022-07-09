@@ -58,7 +58,7 @@ class BlogController extends Controller
                     $i->commentCount = CommentBlog::where('blog_address_id', $i->blog_address_id)->count();
                     $i->likeCount = ReactionBlog::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
                     $i->dislikeCount=ReactionBlog::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
-                }   
+                }
                 return response()->json([
                     'data' => $blog,
                     'status' => 200,
@@ -88,7 +88,7 @@ class BlogController extends Controller
             $item->blog_image = $req->input('blog_image');
             $item->blog_content = $req->input('blog_content');
             if($item->save()){
-                
+
                 return response()->json([
                     'data' => $item,
                     'status' => 200,
@@ -112,7 +112,7 @@ class BlogController extends Controller
                     'data' => $blog,
                     'status' => 200,
                     'message' => 'Delete blog successfully'
-                ]); 
+                ]);
             }else{
                 return response()->json([
                     'status' => 400,
