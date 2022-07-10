@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableBookmark extends Migration
+class CreateGroupMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateTableBookmark extends Migration
      */
     public function up()
     {
-        Schema::create('bookmark', function (Blueprint $table) {
-            $table->id('bookmark_id');
-            $table->bigInteger('address_id')->unsigned();
+        Schema::create('group_members', function (Blueprint $table) {
+            $table->id('group_members_id');
+            $table->bigInteger('group_id')->unsigned();
             $table->bigInteger('id_user')->unsigned();
             $table->timestamps();
 
-            $table->foreign('address_id')->references('address_id')->on('address')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('group_id')->references('group_id')->on('group')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('id_user')->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -31,6 +31,6 @@ class CreateTableBookmark extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bookmark');
+        Schema::dropIfExists('group_members');
     }
 }

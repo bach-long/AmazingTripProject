@@ -25,24 +25,21 @@ class GroupController extends Controller
     public function postGroup(Request $request)
     {
          if($request){
-            $Group= new Group;
+            $Group= new Group();
             $Group->group_name=$request->input('group_name');
             $Group->group_image=$request->input('group_image');
             $Group->address_id=$request->input('address_id');
             $Group->group_admin= $request->input('group_admin');
-            $Group->group_member=$request->input('group_member');
 
             if($Group->save()){
-                $group = Group::all();
                 return response()->json([ 
-                    'data'=>$group,
+                    'data'=>$Group,
                     'status'=>200,
                     'message'=>'success'
                 ]);
                 
             }else{
                 return response()->json([
-                    'data'=>$Group,
                     'status'=>400,
                     'message'=>'false'
 

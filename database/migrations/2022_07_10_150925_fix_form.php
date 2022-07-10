@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateTableUserTravel extends Migration
+class FixForm extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class UpdateTableUserTravel extends Migration
      */
     public function up()
     {
-        Schema::table('user_travel', function (Blueprint $table) {
-            $table->string('phone')->unique();;
+        //
+        Schema::table('form_registed', function (Blueprint $table) {
+            $table->bigInteger('address_id')->unsigned();
+            $table->foreign('address_id')->references('address_id')->on('address')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
@@ -25,8 +27,6 @@ class UpdateTableUserTravel extends Migration
      */
     public function down()
     {
-        Schema::table('user_travel', function (Blueprint $table) {
-            //
-        });
+        //
     }
 }
