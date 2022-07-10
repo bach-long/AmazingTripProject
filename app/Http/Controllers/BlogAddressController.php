@@ -6,7 +6,14 @@ use Illuminate\Http\Request;
 use App\Models\BlogAddress;
 
 class BlogAddressController extends Controller
+
+
 {
+
+    public function getAllBlogAddress(){
+        $blogs = BlogAddress::all();
+        return $blogs;
+    }
     public function getBlog(Request $req, $address_id)
     {
         $blog = BlogAddress::where('address_id', $address_id)->get();
