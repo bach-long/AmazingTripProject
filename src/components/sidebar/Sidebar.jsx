@@ -23,19 +23,21 @@ export default function Sidebar() {
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
             <Link to="/" className="link">
-            <li className="sidebarListItem active">
-              <LineStyle className="sidebarIcon" />
-              Home
-            </li>
-            </Link>
+              <li className="sidebarListItem active">
+                <LineStyle className="sidebarIcon" />
+                Home
+              </li>
+            </Link >
+            <Link to="/" className="link" >
             <li className="sidebarListItem">
               <Timeline className="sidebarIcon" />
               Analytics
             </li>
-            <li className="sidebarListItem">
+            </Link>
+            {/* <li className="sidebarListItem">
               <TrendingUp className="sidebarIcon" />
               Sales
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="sidebarMenu">
@@ -47,20 +49,40 @@ export default function Sidebar() {
                 Users
               </li>
             </Link>
-            <Link to="/products" className="link">
+            <Link to="/hosts" className="link">
               <li className="sidebarListItem">
-                <Storefront className="sidebarIcon" />
-                Products
+                <PermIdentity className="sidebarIcon" />
+                Hosts
+              </li>
+            </Link >
+            <Link to="/addresses" className="link">
+              <li className="sidebarListItem">
+                <AttachMoney className="sidebarIcon" />
+                Addresses
               </li>
             </Link>
-            <li className="sidebarListItem">
-              <AttachMoney className="sidebarIcon" />
-              Transactions
-            </li>
+
+            <Link to="/groups" className="link">
+            
             <li className="sidebarListItem">
               <BarChart className="sidebarIcon" />
-              Reports
+              Groups
             </li>
+            </Link>
+            <Link to="/blogs" className="link">
+            
+            <li className="sidebarListItem">
+              <BarChart className="sidebarIcon" />
+              Blogs of Groups
+            </li>
+            </Link>
+            <Link to="/blogAddresses" className="link">
+            
+            <li className="sidebarListItem">
+              <BarChart className="sidebarIcon" />
+              Blogs of Addresses
+            </li>
+            </Link>
           </ul>
         </div>
         <div className="sidebarMenu">

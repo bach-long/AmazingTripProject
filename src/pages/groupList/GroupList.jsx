@@ -1,20 +1,22 @@
-import "./userList.css";
+import "./groupList.css";
 import { DataGrid } from "@material-ui/data-grid";
-import { DeleteOutline } from "@material-ui/icons";
-import { userRows } from "../../dummyData";
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useEffect } from "react";
 import http from "../../http";
 
-export default function UserList() {
+export default function GroupList() {
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetch = async () => {
-      const res = await http.get('/infoofusers');
-      const needData = res.data.map(user => {
+      const res = await http.get('/groups');
+      const needData = res.data.data.map(group => {
+
         return {
-          id: user.id, username: user.username, email: user.email, phone: user.phone, address: user.address, nickname: user.nickname
+          id: group.group_id,
+          Name: group.group_name,
+          Admin: group.group_admin,
+          Member: group.group_member,
+          Address: group.address_id
         }
       })
       setData(needData);
@@ -22,43 +24,27 @@ export default function UserList() {
     fetch();
   }, [])
 
-  // const handleDelete = (id) => {
-  //   // setData(data.filter((item) => item.id !== id));
-  //   http.delete(`/delete/`+id).then(res =>
-  //     console.log(res))
-  // };
-
+  
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
+
+    
+    { field: "Name", headerName: "Name", width: 200 },
     {
-      field: "username",
-      headerName: "User",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="userListUser">
-            <img className="userListImg" src={params.row.avatar} alt="" />
-            {params.row.username}
-          </div>
-        );
-      },
-    },
-    { field: "email", headerName: "Email", width: 200 },
-    {
-      field: "phone",
-      headerName: "Phone",
+      field: "Admin",
+      headerName: "Admin",
       width: 120,
     },
     {
-      field: "address",
-      headerName: "Address",
+      field: "Member",
+      headerName: "Member",
       width: 300,
     },
-    {
-      field: "nickname",
-      headerName: "Nickname",
-      width: 200,
-    },
+    // {
+    //   field: "nickname",
+    //   headerName: "Nickname",
+    //   width: 200,
+    // },
     // {
     //   field: "action",
     //   headerName: "Action",

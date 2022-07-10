@@ -1,4 +1,4 @@
-import "./userList.css";
+import "./addressList.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import { userRows } from "../../dummyData";
@@ -7,14 +7,19 @@ import { useState } from "react";
 import { useEffect } from "react";
 import http from "../../http";
 
-export default function UserList() {
+export default function AddressList() {
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetch = async () => {
-      const res = await http.get('/infoofusers');
-      const needData = res.data.map(user => {
+      const res = await http.get('/addresses');
+      const needData = res.data.data.map(address => {
+
         return {
-          id: user.id, username: user.username, email: user.email, phone: user.phone, address: user.address, nickname: user.nickname
+          id: address.address_id,
+          Id_Host: address.id_host,
+          Name: address.address_name,
+          Description: address.address_description,
+          Map: address.address_map
         }
       })
       setData(needData);
@@ -30,35 +35,36 @@ export default function UserList() {
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
+
+    // {
+    //   field: "Id_Host",
+    //   headerName: "Id_Host",
+    //   width: 200,
+    //   // renderCell: (params) => {
+    //   //   return (
+    //   //     <div className="userListUser">
+    //   //       <img className="userListImg" src={params.row.avatar} alt="" />
+    //   //       {params.row.username}
+    //   //     </div>
+    //   //   );
+    //   // },
+    // },
+    { field: "Name", headerName: "Name", width: 200 },
     {
-      field: "username",
-      headerName: "User",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="userListUser">
-            <img className="userListImg" src={params.row.avatar} alt="" />
-            {params.row.username}
-          </div>
-        );
-      },
-    },
-    { field: "email", headerName: "Email", width: 200 },
-    {
-      field: "phone",
-      headerName: "Phone",
+      field: "Description",
+      headerName: "Description",
       width: 120,
     },
     {
-      field: "address",
-      headerName: "Address",
+      field: "Map",
+      headerName: "Map",
       width: 300,
     },
-    {
-      field: "nickname",
-      headerName: "Nickname",
-      width: 200,
-    },
+    // {
+    //   field: "nickname",
+    //   headerName: "Nickname",
+    //   width: 200,
+    // },
     // {
     //   field: "action",
     //   headerName: "Action",

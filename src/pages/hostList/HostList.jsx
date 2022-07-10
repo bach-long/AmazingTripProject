@@ -1,4 +1,4 @@
-import "./userList.css";
+import "./hostList.css";
 import { DataGrid } from "@material-ui/data-grid";
 import { DeleteOutline } from "@material-ui/icons";
 import { userRows } from "../../dummyData";
@@ -7,11 +7,11 @@ import { useState } from "react";
 import { useEffect } from "react";
 import http from "../../http";
 
-export default function UserList() {
+export default function HostList() {
   const [data, setData] = useState([]);
   useEffect(() => {
     const fetch = async () => {
-      const res = await http.get('/infoofusers');
+      const res = await http.get('/infoofhosts');
       const needData = res.data.map(user => {
         return {
           id: user.id, username: user.username, email: user.email, phone: user.phone, address: user.address, nickname: user.nickname
