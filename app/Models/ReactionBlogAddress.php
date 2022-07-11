@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ReactionBlogAdress extends Model
+class ReactionBlogAddress extends Model
 {
     use HasFactory;
     protected $table = 'reaction_blog_address';

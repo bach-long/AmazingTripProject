@@ -13,14 +13,14 @@ class BlogController extends Controller
 {
     public function getBlog($group_id)
     {
-        $blog = Blog::where('address_id', $group_id)->get();
-        foreach($blog as $i){
+        $blog = Blog::where('group_id', $group_id)->orderBy('created_at', 'desc')->get();
+        foreach($blog as $i) {
             $user = User::where('id', $i->id_user)->first();
-            $i->nickname=$user->nickname;
-            $i->avatar=$user->avatar;
-            $i->commentCount = CommentBlog::where('blog_address_id', $i->blog_address_id)->count();
-            $i->likeCount = ReactionBlog::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
-            $i->dislikeCount=ReactionBlog::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+            $i->nickname = $user->nickname;
+            $i->avatar = $user->avatar;
+            $i->commentCount = CommentBlog::where('blog_id', $i->blog_id)->count();
+            $i->likeCount = ReactionBlog::where('blog_id', $i->blog_id)->where('reaction', 1)->count();
+            $i->dislikeCount = ReactionBlog::where('blog_id', $i->blog_id)->where('reaction', 0)->count();
         }
             return response()->json([
                 'data' => $blog,
@@ -33,32 +33,22 @@ class BlogController extends Controller
         if($req){
             $blo =  new Blog();
             $blo->id_user = $req->input('id_user');
-            $blo->address_id = $req->input('address_id');
-            $blo->blog_address_title = $req->input('blog_address_title');
-            $blo->blog_address_image = $req->input('blog_address_image');
-            $blo->blog_address_content = $req->input('blog_address_content');
-
-
-            $image = $req->blog_address_image;
-            if(!empty($image))
-            {
-                $req->blog_address_image = $image->getClientOriginalName();
-                $image->move('upload/blog_address',$image->getClientOriginalName());
-            }else{
-                $blo->blog_address_image = 'default.jpg';
-            }
-
+            $blo->group_id = $req->input('group_id');
+            $blo->blog_title = $req->input('blog_title');
+            $blo->blog_image = $req->input('blog_image');
+            $blo->blog_content = $req->input('blog_content');
 
             if($blo->save()){
-                $blog = Blog::where('address_id', $req->address_id)->get();
-                foreach($blog as $i){
+                $blog = Blog::where('group_id', $req->group_id)->orderBy('created_at', 'desc')->get();
+                foreach($blog as $i) {
                     $user = User::where('id', $i->id_user)->first();
-                    $i->nickname=$user->nickname;
-                    $i->avatar=$user->avatar;
-                    $i->commentCount = CommentBlog::where('blog_address_id', $i->blog_address_id)->count();
-                    $i->likeCount = ReactionBlog::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
-                    $i->dislikeCount=ReactionBlog::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+                    $i->nickname = $user->nickname;
+                    $i->avatar = $user->avatar;
+                    $i->commentCount = CommentBlog::where('blog_id', $i->blog_id)->count();
+                    $i->likeCount = ReactionBlog::where('blog_id', $i->blog_id)->where('reaction', 1)->count();
+                    $i->dislikeCount = ReactionBlog::where('blog_id', $i->blog_id)->where('reaction', 0)->count();
                 }
+
                 return response()->json([
                     'data' => $blog,
                     'status' => 200,

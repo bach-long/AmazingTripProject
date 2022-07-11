@@ -18,7 +18,7 @@ class AddressController extends Controller
             $i->nickname=$user->nickname;
             $i->avatar=$user->avatar;
             $i->blogCount=BlogAddress::where('address_id', $i->address_id)->first();
-            $i->formCount=FormRegister::where('address_id', $i->address_id)->first();
+           // $i->formCount=FormRegister::where('address_id', $i->address_id)->first();
         }
         return response()->json([
             'data' => $address,

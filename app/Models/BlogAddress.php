@@ -14,7 +14,7 @@ class BlogAddress extends Model
         'blog_address_id',
         'id_user',
         'address_id',
-        'blog_address_title',
+        'blog_address_vote',
         'blog_address_image',
         'blog_address_content',
         'created_at',
