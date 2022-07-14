@@ -133,23 +133,5 @@ class AddressController extends Controller
                     'message'=>'get address successfull'
                 ]);
             }
-/*
-
-        $address=Address::all();
-        if(!$address){
-            return response()->json([
-                'status'=>404,
-                'message'=>'Not found data'
-            ]);
-        }else{
-            return response()->json([
-                'data'=>$address->id,
-                'status'=>200,
-                'message'=>'get address by id success'
-            ]);
-        }
-        */
-    }
-
-        
+    }        
 }

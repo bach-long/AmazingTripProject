@@ -16,7 +16,10 @@ class CommentBlogAddressFactory extends Factory
     public function definition()
     {
         return [
-            
+            'blog_address_id'=>$this->faker->numberBetween(1,10),
+            'id_user'=>$this->faker->numberBetween(1,10),
+            'comment_address_image'=>null,
+            'comment_address_content'=>$this->faker->text($maxNbChars = 200)
         ];
     }
 }
