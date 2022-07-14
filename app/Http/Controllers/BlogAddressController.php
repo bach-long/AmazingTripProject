@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\BlogAddress;
 use App\Models\CommentBlogAddress;
-use App\Models\ReactionBlogAdress;
+use App\Models\ReactionBlogAddress;
 use App\Models\User;
 
 class BlogAddressController extends Controller
@@ -18,8 +18,8 @@ class BlogAddressController extends Controller
             $i->nickname=$user->nickname;
             $i->avatar=$user->avatar;
             $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
-            $i->likeCount = ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
-            $i->dislikeCount=ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+            $i->likeCount = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
+            $i->dislikeCount=ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
         }
             return response()->json([
                 'data' => $blog,
@@ -33,7 +33,7 @@ class BlogAddressController extends Controller
             $blo =  new BlogAddress();
             $blo->id_user = $req->input('id_user');
             $blo->address_id = $req->input('address_id');
-            $blo->blog_address_title = $req->input('blog_address_title');
+            //$blo->blog_address_title = $req->input('blog_address_title');
             $blo->blog_address_image = $req->input('blog_address_image');
             $blo->blog_address_content = $req->input('blog_address_content');
 
@@ -57,7 +57,7 @@ class BlogAddressController extends Controller
                     $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
                     $i->likeCount = ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
                     $i->dislikeCount=ReactionBlogAdress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
-                }   
+                }
                 return response()->json([
                     'data' => $blog,
                     'status' => 200,

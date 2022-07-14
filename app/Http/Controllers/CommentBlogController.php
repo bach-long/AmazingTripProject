@@ -10,7 +10,7 @@ class CommentBlogController extends Controller
 {
     //
     public function getAllCommentBlog ($blog_id){
-        $comments = CommentBlog::where('blog_address_id', $blog_id)->get();
+        $comments = CommentBlog::where('blog_id', $blog_id)->get();
         foreach($comments as $comment){
             $commenter = User::where('id', $comment->id_user)->first();
             $comment->nickname=$commenter->nickname;
@@ -27,15 +27,15 @@ class CommentBlogController extends Controller
         $comment = new CommentBlog();
         $comment->blog_id=$request->blog_id;
         $comment->id_user=$request->id_user;
-        $comment->bomment_blog_content= $request->comment_blog_content;
-        $comments = CommentBlog::where('blog_address_id', $request->blog_id)->get();
-        foreach($comments as $comment){
-            $commenter = User::where('id', $comment->id_user)->first();
-            $comment->nickname=$commenter->nickname;
-            $comment->avatar=$commenter->avatar;
-        }
-        
+        $comment->comment_blog_content= $request->comment_blog_content;
+
         if($comment->save()){
+            $comments = CommentBlog::where('blog_id', $request->blog_id)->get();
+            foreach($comments as $comment){
+                $commenter = User::where('id', $comment->id_user)->first();
+                $comment->nickname=$commenter->nickname;
+                $comment->avatar=$commenter->avatar;
+            }
             return response()->json([
                 'data'=> $comments,
                 'status'=>200,
@@ -53,12 +53,7 @@ class CommentBlogController extends Controller
     public function editCommentBlog(Request $request){
         $comment = CommentBlog::find($request->comment_blog_id);
         if($comment){
-            $comments = CommentBlog::where('blog_address_id', $request->blog_id)->get();
-            foreach($comments as $comment){
-                $commenter = User::where('id', $comment->id_user)->first();
-                $comment->nickname=$commenter->nickname;
-                $comment->avatar=$commenter->avatar;
-            }
+            $comments = CommentBlog::where('blog_id', $request->blog_id)->get();
             $comment->comment_blog_content = $request->comment_blog_content;
             if($comment->save()){
                 return response()->json([
@@ -78,14 +73,14 @@ class CommentBlogController extends Controller
                 'status'=>404,
                 'message'=>'doesnt exist'
             ]);
-        } 
+        }
     }
 
     public function deleteCommentBlog(Request $request) {
         $comment = CommentBlog::find($request->comment_blog_id);
         if($comment){
             if($comment->delete()){
-                $comments = CommentBlog::where('blog_address_id', $request->blog_id)->get();
+                $comments = CommentBlog::where('blog_id', $request->blog_id)->get();
                 foreach($comments as $comment){
                     $commenter = User::where('id', $comment->id_user)->first();
                     $comment->nickname=$commenter->nickname;
