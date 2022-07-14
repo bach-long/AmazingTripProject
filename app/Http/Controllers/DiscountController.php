@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Discount; 
-
+use App\Models\FormRegister;
 class DiscountController extends Controller
 {
     public function getDiscount()
@@ -95,6 +95,38 @@ class DiscountController extends Controller
                     'message' => 'Delete Discount false'
                 ]);
             }
+        }
+    }
+
+    // get discount by each address
+    public function getFormDiscount($address_id){
+        $discount= Discount::where('address_id',$address_id)->first();
+        if($discount){
+            
+            $registers=FormRegister::where('discount_id',$discount->discount_id)->get();
+            foreach($registers as $register){
+                $discount->number_registed += $register->quantity_registed;
+            }
+            
+            //$discount->number_registed= FormRegister::where('discount_id',$discount->discount_id)->count('quantity_registed');
+            if($discount->save()){
+                return response()->json([
+                    'data'=>$discount,
+                    'status'=>200,
+                    'message'=>'get discount form successfull'
+                ]);
+            }else{
+                return response()->json([
+                    'status'=>404,
+                    'message'=>'no discount for  had found'
+                ]);
+            }
+        }
+        else{
+            return response()->json([
+                'status'=>404,
+                'message'=>'no discount for  had found'
+            ]);
         }
     }
 }

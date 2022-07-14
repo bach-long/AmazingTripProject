@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use Faker\Factory as Faker;
-
-class UserSeeder extends Seeder
+use App\Models\Discount;
+class DiscountSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +12,7 @@ class UserSeeder extends Seeder
      * @return void
      */
     public function run()
-    {    
-        User::factory()->count(20)->create();
+    {
+        Discount::factory()->count(10)->create();
     }
 }
