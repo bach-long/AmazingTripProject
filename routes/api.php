@@ -70,6 +70,7 @@ Route::get('/discount',[DiscountController::class,'getDiscount']);
 Route::post('/discount',[DiscountController::class,'postDiscount']);
 Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
+Route::get('/discount/address={address_id}',[DiscountController::class,'getFormDiscount']);
 
 Route::post('/createCommentBlog/{blog_id}',[CommentBlogAddressController::class, 'createCommentBlog']);
 Route::get('/commentsBlog/{blog_id}',[CommentBlogAddressController::class, 'getAllCommentBlog']);
