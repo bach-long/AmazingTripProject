@@ -10,6 +10,7 @@
     img {
         height: var(--avatar-size);
         width: var(--avatar-size);
+        object-fit: cover;
     }
 
     li {
@@ -20,6 +21,12 @@
         border-top: 1px solid rgba(95, 108, 123, 0.2);
         
         a h5 {
+            font-size: 14px;
+        }
+
+        button {
+            background-color: transparent;
+            color: var(--text-dark-blue);
             font-size: 14px;
         }
     }

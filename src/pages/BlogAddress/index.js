@@ -1,24 +1,40 @@
 import { Fragment, useContext, useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import BottomAddress from './BottomBlogAddress/BottomAddress';
 import HeaderAddress from './HeaderBlogAddress';
 import CenterAddress from './CenterBlogAddress';
 import DiscountForm from './DiscountForm';
 import { FormCreateNewGroupContext } from './CreateNewGroupContext';
-import { FormDiscountContext } from './FormDiscountContext';
 import { Left, Right, Paginate } from '../../components/Layouts/components';
 import CreateFormNewGroup from './CreateFormNewGroup';
-import { useParams } from 'react-router-dom';
+import { BlogAddressContext } from './BlogAddressContext';
+import addressApi from '../../api/addressApi';
 
 function BlogAddress() {
+    const context = useContext(BlogAddressContext)
 
-    const formContext = useContext(FormDiscountContext)
+    const { id } = useParams();
+
+    useEffect(() => {
+        const fetchAddressList = async () => {
+            try {
+                const res = await addressApi.get(id);
+                context.setAddressData(res.data);
+                context.setGroupList(res.group);
+                context.setPostData(res.blog);
+            } catch (error) {
+                console.log('Toang meo chay r loi cc ', error)
+            }
+        };
+        fetchAddressList();
+    }, [])
+
     const createNewGroup = useContext(FormCreateNewGroupContext)
     
     return (
-        // <FormDiscountProvider>
         <Fragment>
-            <div className='row m-0 ps-1 pe-1' style={{ maxHeight: '550px' }}>
-                <HeaderAddress  />
+            <div className='row m-0 ps-1 pe-1'>
+                <HeaderAddress />
                 <CenterAddress />
             </div>
             <div className='row m-0 ps-1 pe-1 mt-3'>
@@ -35,10 +51,9 @@ function BlogAddress() {
                     <Right />
                 </div>
             </div>
-            {formContext.showForm && <DiscountForm />}
+            {context.showForm && <DiscountForm />}
             {createNewGroup.showCreate && <CreateFormNewGroup />}
         </Fragment>
-        // </FormDiscountProvider>
     );
 }
 export default BlogAddress;

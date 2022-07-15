@@ -50,23 +50,34 @@ function Step4() {
             URL.revokeObjectURL(previewAvatar.preview)
         }
     }, [previewAvatar])
-
+	
     // Xem tạm thời ảnh sau khi ảnh được
     const handlePreviewAvatar = async (e) => {
-        const file = e.target.files[0]
+		if(context.formData.avatar !== '')
+		{
+		 	deleteImage(context.formData.avatar);
+			context.setFormData({ ...context.formData, avatar: ''});
+		}
+		const file = e.target.files[0]
 		const imagePath = await storeImage(file);
-		console.log(imagePath);
-		context.setFormData({...context.formData, avatar: imagePath})
+		//console.log(imagePath);
+		await context.setFormData({ ...context.formData, avatar: imagePath});
+		//console.log('0', context.formData);
         file.preview = URL.createObjectURL(file);
 		setPreviewAvatar(file);
     }
 
-
+	useEffect(() => {
+		
+	}, [])
+	
+	
 	const handleSubmit = () => {
 		setCheckEmpty(true)
 		
 		if(context.formData.nickname)
 		{
+			//console.log('1', context.formData);
 			context.handleSubmit()
 		}
 	}
@@ -91,7 +102,7 @@ function Step4() {
 							<input 
 								type="file" 
 								id="avatar"
-								onChange={handlePreviewAvatar}
+								onChange={(e) => handlePreviewAvatar(e)}
 							/>
 						</div>
 					</Fragment>

@@ -63,6 +63,7 @@ header {
     img {
         height: 100%;
         width: 100%;
+        object-fit: cover;
     }
 
     &:focus {
@@ -96,4 +97,12 @@ header {
             margin-right: 10px !important;
         }
     }
+}
+
+.btn-login {
+    background-color: var(--btn-orange);
+    border-radius: 50px;
+    color: var(--white);
+    font-weight: 600;
+    padding: 5px 20px;
 }

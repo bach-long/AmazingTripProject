@@ -1,39 +1,21 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './BottomAddress.module.scss';
 import { BlogAddressPost } from '../../../components/Layouts/components';
-import blogAddressPostApi from '../../../api/blogAddressPostApi';
+import { BlogAddressContext } from '../BlogAddressContext';
+import { CommentProvider } from '../../../components/Layouts/components/BlogAddressPost/ReactComment/CommentContext';
 
 const cx = classNames.bind(styles);
 
 function BottomAddress() {
     const {id} = useParams();
-    const [postData, setPostData] = useState([]);
-
-    useEffect(() => {
-        const fetchPostList = async () => {
-            try {
-                const res = await blogAddressPostApi.get(id);
-                setPostData(res.data) 
-            } catch (error) {
-                console.log('Toang meo chay r loi cc:  ', error)
-            }
-        }
-
-        fetchPostList();
-    },[])
-
+    const context = useContext(BlogAddressContext);
+    
     return (
-        <div className="bottom">
-            {postData.map((each, index) => {
-                return (
-                    each ? (
-                    <Fragment key={each.blog_address_id}>
-                        <BlogAddressPost postData={each} key={each.blog_address_id}/>
-                    </Fragment>
-                    ) : (
-                        <div key={index} className={cx('empty-area')}>
+            <div className={cx('bottom')}>
+                {context.postData?.length == 0 ? (
+                        <div className={cx('empty-area')}>
                             <h1>
                                 Chưa có bình luận nào cả... 
                                 <br/>
@@ -46,10 +28,16 @@ function BottomAddress() {
                                 </Link>
                             </button>
                         </div>
-                    )
-                )
-            })}
-        </div>
+                    ) : 
+                    context.postData?.map((each) => (
+                        <CommentProvider  key={each.blog_address_id}>
+                            <div className={cx('each-post')}>
+                                <BlogAddressPost postData={each} slideShow={false}/>
+                            </div>
+                        </CommentProvider>
+                    ))
+                } 
+            </div>
     )
 }
 

@@ -1,7 +1,16 @@
 .avt-and-name {
+    margin-bottom: 10px;
     p {
         font-weight: bold;
+        margin-left: 10px;
     }
+}
+
+.user-ava {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .comment-area {
@@ -42,7 +51,8 @@
     position: absolute;
     top: 20%;
     left: 98%;
-    z-index: 999999;
+    z-index: 999;
+    border-radius: 4px;
 
     button:first-child {
         border-bottom: 1px rgba($color: #094067, $alpha: 0.3) solid;

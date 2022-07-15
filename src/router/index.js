@@ -21,8 +21,9 @@ import Register from '../pages/AuthPage/Register';
 import ListAddresses from '../pages/ListAddresses';
 
 // Provider
-import { FormDiscountProvider } from '../pages/BlogAddress/FormDiscountContext';
-import { CreatePostProvider } from '../pages/GroupPage/CreatePostContext';
+import { UserPageProvider } from '../pages/UserPage/UserPageContext';
+import { BlogAddressProvider } from '../pages/BlogAddress/BlogAddressContext';
+import { GroupPageProvider } from '../pages/GroupPage/GroupPageContext';
 import { RegisterProvider } from '../pages/AuthPage/Register/RegisterContext';
 
 import Login from '../pages/AuthPage/Login';
@@ -41,12 +42,12 @@ const privateRoutes = [
 
     { path: '/test', component: Test, layout: DefaultLayout },
     { path: '/', component: Home, layout: OneSide },
-    // { path: '/blog', component: BlogAddress, layout: DefaultLayout, provider: FormDiscountProvider },
+    // { path: '/blog', component: BlogAddress, layout: DefaultLayout, provider: BlogAddressProvider },
     { path: '/address/:id/createBlog', component: CreatePost, layout:DefaultLayout },
     { path: '/host', component: HostPage, layout: OneSide },
-    { path: '/user', component: UserPage, layout: DefaultLayout },
-    { path: '/user_edit', component: UserEditPage, layout: DefaultLayout },
-    { path: '/group', component: GroupPage, layout: DefaultLayout, provider: CreatePostProvider },
+    { path: '/user/:id', component: UserPage, layout: DefaultLayout, provider: UserPageProvider },
+    { path: '/user_edit/:id', component: UserEditPage, layout: DefaultLayout },
+    { path: '/group/:id', component: GroupPage, layout: DefaultLayout, provider: GroupPageProvider },
 
     // SomeThing
     { path: '/createAddress', component: Form, layout: DefaultLayout },
@@ -54,7 +55,7 @@ const privateRoutes = [
     { path: '/addSale', component: Sale, layout: DefaultLayout },
 
     { path: '/listAddresses', component: ListAddresses, layout: DefaultLayout },
-    { path: '/address/:id', component: BlogAddress, layout: DefaultLayout, provider: FormDiscountProvider},
+    { path: '/address/:id', component: BlogAddress, layout: DefaultLayout, provider: BlogAddressProvider},
 
 ];
 

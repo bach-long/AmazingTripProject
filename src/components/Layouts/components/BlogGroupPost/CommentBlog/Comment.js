@@ -1,29 +1,33 @@
-import React from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { toast } from 'react-toastify';
 import styles from './Comment.module.scss' ;
 import classNames from 'classnames/bind';
-import commentAddressApi from '../../../../../api/commentAddressApi';
+import commentGroupApi from '../../../../../api/commentGroupApi';
+import { GroupPageContext } from '../../../../../pages/GroupPage/GroupPageContext';
 import getCookie from '../../../../../hooks/getCookie';
+import getImage from '../../../../../hooks/getImage';
 
 const cx = classNames.bind(styles);
 
 
 function Comment ({comment}) {
-
     const editStyle = {
         cursor: 'context-menu',
         outline: 'none'
     }
 
+    const context = useContext(GroupPageContext);
+
     const userData = JSON.parse(getCookie('userin'));
 
-    const editRef = useRef();
     const inputRef = useRef();
+    const toggleRef = useRef();
+
+    const [ava, setAva] = useState();
+
     const [showDot, setShowDot] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [edit, setEdit] = useState(false);
-    const [editFocus, setEditFocus] = useState(false);
 
     const [editVal, setEditVal] = useState(comment);
 
@@ -31,8 +35,10 @@ function Comment ({comment}) {
     const handleDelete = () => {
         try {
             const comment_id = comment.comment_blog_id;
-            commentAddressApi.delete(comment_id);
-            toast.warning('Xóa bình luận thành công !!!');
+            context.handleResetCommentData(comment_id);
+            context.handleResetCommentCount(comment.blog_id, false);
+            commentGroupApi.delete(comment_id);
+            toast.warning('Bình luận đã bị xóa !!!');
         } catch (error) {
             console.log('Toang meo chay roi loi cc: ', error)
         }
@@ -47,7 +53,7 @@ function Comment ({comment}) {
     const handleSendEdit = () => {
         setEdit(false);
         try {
-            commentAddressApi.patch(editVal);
+            commentGroupApi.patch(editVal);
         } catch (error) {
             console.log('Toang meo chay roi loi cc: ', error);
         }
@@ -55,10 +61,9 @@ function Comment ({comment}) {
 
     useEffect(() => {
         const handler = (e) => {
-            if(!editRef.current.contains(e.target))
+            if(!toggleRef?.current?.contains(e.target))
                 setShowEdit(false);
         }
-
 
         document.addEventListener('mousedown', handler)
 
@@ -67,15 +72,29 @@ function Comment ({comment}) {
         }
     })
 
+    useEffect(() => {
+        const getImageUrl = async () => {
+            if(comment.avatar !== null)
+            {
+                const res = await getImage(comment.avatar);
+                setAva(res);
+            }
+        }
+        getImageUrl();
+    }, [])
     
     return (
         <div className="mb-4" style={{ position: 'relative', }}>
             <div className={cx('avt-and-name')}>
-                <img src="https://i.imgur.com/hczKIze.jpg" width="35" className="user-img rounded-circle m-2 col-xs-2" />
-                <p className="d-inline">james_olesenn</p>
+                <img 
+                    src={ava} 
+                    className={cx('user-ava')}
+                />
+                <p className="d-inline">
+                    {comment.nickname}
+                </p>
             </div>
             <div 
-                ref={editRef}
                 className={cx('comment-area')}
                 onMouseOver={() => setShowDot(true)}
                 onMouseLeave={() => setShowDot(false)}
@@ -83,9 +102,9 @@ function Comment ({comment}) {
                 <input
                     ref={inputRef}
                     className={cx('comment')}
-                    value={editVal.comment_address_content}
+                    value={editVal.comment_blog_content}
                     onChange={(e) => 
-                        setEditVal({...editVal, comment_address_content: e.target.value})
+                        setEditVal({...editVal, comment_blog_content: e.target.value})
                     }
                     readOnly={!edit}
                     style={ edit ? {} : editStyle}
@@ -107,7 +126,7 @@ function Comment ({comment}) {
                 )}
                 { showEdit && 
                     <div 
-                        
+                        ref={toggleRef}
                         className={cx('btn-edit-del')}
                     >
                         <button 
