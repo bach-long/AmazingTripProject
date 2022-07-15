@@ -19,13 +19,18 @@ class CreateTableGroup extends Migration
             $table->string('group_image')->nullable();
             $table->bigInteger('address_id')->unsigned();
             $table->bigInteger('group_admin')->unsigned();
-            $table->string('group_member');
+            //$table->string('group_member');
             $table->timestamps();
 
-            $table->foreign('address_id','group_admin')
-                ->references('address_id','id')->on('address','user_travel')
+            $table->foreign('address_id')
+                ->references('address_id')->on('address')
                 ->onDelete('CASCADE')
                 ->onUpdate('CASCADE');
+            $table->foreign('group_admin')
+                ->references('id')->on('user_travel')
+                ->onDelete('CASCADE')
+                ->onUpdate('CASCADE');
+        
         });
     }
 
