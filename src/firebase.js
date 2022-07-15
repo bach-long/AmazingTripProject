@@ -22,6 +22,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
+
 const app = firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 const auth = firebase.auth();
@@ -30,3 +31,9 @@ const db = firebase.firestore();
 export const storage = getStorage(app);
 export {auth, db};
 export default firebase;
+
+/*const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+export default firebase;
+export const auth = getAuth(app);
+export const storage = getStorage(app);*/
