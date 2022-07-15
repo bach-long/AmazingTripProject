@@ -32,6 +32,13 @@ Route::post('/login',[LoginControler::class,'PostLogin']);
 Route::post('/register',[RegisterController::class,'PostRegister']);
 
 Route::get('/profile/{id}',[UserController::class,'getProfile']);
+Route::get('/numberofusers',[UserController::class,'getNumberofUsers']);
+Route::get('/numberofhosts',[UserController::class,'getNumberofHosts']);
+Route::get('/infoofusers',[UserController::class,'getInfomationOfUsers']);
+Route::get('/infoofhosts',[UserController::class,'getInfomationOfHosts']);
+Route::delete('/delete/{id}',[UserController::class,'deleteUser']);
+Route::get('/usersbydate',[UserController::class,'getUsersByDate']);
+Route::get('/hostsbydate',[UserController::class,'getHostsByDate']);
 
 
 Route::get('/address',[AddressController::class,'getAddress']);
@@ -39,23 +46,28 @@ Route::post('/address',[AddressController::class,'postAddress']);
 Route::get('/address/{id}',[AddressController::class,'getEachAddress']);
 Route::post('/address/{id}',[AddressController::class,'editAddress']);
 Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
-
 Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']);
+Route::get('/numberofaddresses',[AddressController::class,'getNumberofAddress']);
+Route::get('/addressesbydate',[AddressController::class,'AddressesByDate']);
 
 // blog Address
 Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
 Route::post('/blogAddress',[BlogAddressController::class,'postBlog']);
+Route::get('/blogaddresses',[BlogAddressController::class,'getAllBlogAddress']);
+Route::delete('/blogaddress',[BlogAddressController::class,'deleteBlog']);
 
 Route::get('/blog',[BlogController::class,'getBlog']);
 Route::post('/blog',[BlogController::class,'postBlog']);
 Route::patch('/blog/{id}',[BlogController::class,'editBlog']);
 Route::delete('/blog/{id}',[BlogController::class,'deleteBlog']);
 
-Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
+Route::get('/bookmark/{id_user}',[BookmarkController::class,'getBookmark']);
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
 Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 
 Route::get('/group',[GroupController::class,'getGroup']);
+Route::get('/numberofgroups',[GroupController::class,'NumberofGroups']);
+Route::get('/groupsbydate',[GroupController::class,'GroupsByDate']);
 Route::get('/group/{id}',[GroupController::class,'showGroup']) ; // show detail 1 group
 Route::post('/group',[GroupController::class,'postGroup']);
 Route::patch('/group/{id}',[GroupController::class,'editGroup']);
@@ -76,7 +88,7 @@ Route::patch('/editCommentBlog',[CommentBlogAddressController::class, 'editComme
 Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressController::class, 'deleteCommentBlog']);
 Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 
-Route::get('/getRegisters/address_id',[FormRegisterController::class, 'getRegisterListForAddress']);
+Route::get('/getRegisters/{address_id}',[FormRegisterController::class, 'getRegisterListForAddress']);
 Route::post('/createForm',[FormRegisterController::class, 'postFormRegister']);
 Route::patch('/editForm/{id}',[FormRegisterController::class, 'editFormRegister']);
 Route::delete('/deleteForm',[FormRegisterController::class, 'deleteFormRegister']);

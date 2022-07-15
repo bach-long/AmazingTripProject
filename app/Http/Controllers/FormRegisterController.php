@@ -20,7 +20,7 @@ class FormRegisterController extends Controller
             return response()->json([
                 'data' =>  $list,
                 'status' => 200,
-                'message' => 'Get follow successfully'
+                'message' => 'success'
             ]);
         } else {
             return response()->json([
