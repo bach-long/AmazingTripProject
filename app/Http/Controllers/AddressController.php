@@ -9,7 +9,10 @@ use App\Models\Address;
 use App\Models\BlogAddress;
 use App\Models\FormRegister;
 use App\Models\User;
-
+use App\Models\Bookmark;
+use App\Models\Discount;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class AddressController extends Controller
 {
     public function getAddress()
@@ -185,4 +188,48 @@ class AddressController extends Controller
         }
     }
 
+    //tìm 3 address có lươt theo dõi nhiều nhất 
+    public function ListAddressByBookmark(){            
+            $address= Address::all();
+            $address_count= Address::all()->count();
+            foreach($address as $add){
+                $add->count= Bookmark::where('address_id',$add->address_id)->count();
+            }
+            for($i=0;$i<$address_count;$i++){
+                $max=$address[0];
+                for($j=$i+1;$j<$address_count;$j++){
+                    if($address[$j]->count>$address[$i]->count){
+                        $max=$address[$i];
+                        $address[$i]=$address[$j];
+                        $address[$j]=$max;
+                    }
+                }
+            }         
+           return response()->json([    
+                'data1'=>$address[0],
+                'data2'=>$address[1],
+                'data3'=>$address[2],
+                'status'=>200,
+                'message'=>'get address succesfully'
+            ]);
+    }
+
+    //tìm 3 address có lượt khuyến mãi cao nhất
+    public function ListAddressByDiscount(){
+       
+        $discount= DB::table('discount')->orderBy('discount_rate','desc')->get();
+        $i=0;
+        foreach($discount as $dis){
+            $address[$i]= Address::where('address_id',$dis->address_id)->first();
+            //$address->discount= $dis->discount_rate;
+            $i++;
+        }    
+        return response()->json([    
+            'data1'=>$address[0],
+            'data2'=>$address[1],
+            'data3'=>$address[2],
+            'status'=>200,
+            'message'=>'get address succesfully'
+        ]);
+    }
 }
