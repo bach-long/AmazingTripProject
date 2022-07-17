@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\CommentBlogAddress;
+use App\Models\Discount;
 use App\Models\Group;
 use App\Models\ReactionBlogAddress;
 use Illuminate\Http\Request;
@@ -38,14 +39,7 @@ class AddressController extends Controller
             $add->address_image = $req->input('address_image');
             $add->address_map = $req->input('address_map');
             if($add->save()){
-                $address = Address::where('id_host', $req->id_host)->get();
-                foreach($address as $i){
-                    $user = User::where('id', $i->id_host)->first();
-                    $i->nickname=$user->nickname;
-                    $i->avatar=$user->avatar;
-                    $i->blogCount=BlogAddress::where('address_id', $i->address_id)->first();
-                    $i->formCount=FormRegister::where('address_id', $i->address_id)->first();
-                }
+                $address = Address::where('id_host', $req->id_host)->orderBy('created_at', 'desc')->first();
                 return response()->json([
                     'data' => $address,
                     'status' => 200,
@@ -79,6 +73,9 @@ class AddressController extends Controller
                     $item->blogCount=BlogAddress::where('address_id', $item->address_id)->first();
                     //$item->formCount=FormRegister::where('address_id', $item->address_id)->first();
             $group = Group::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
+            $discount = Discount::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->first();
+            $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
+            $discount->quantity_registed = $registed;
             $blog = BlogAddress::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
             foreach($blog as $i){
                 $user = User::where('id', $i->id_user)->first();
@@ -92,6 +89,7 @@ class AddressController extends Controller
                 'data' => $item,
                 'group' => $group,
                 'blog' => $blog,
+                'discount' => $discount,
                 'status' => 200,
                 'message' => 'Founded address successfully'
             ]);
@@ -155,32 +153,37 @@ class AddressController extends Controller
         }
     }
 
-    public function getAddressByHost($id)
+    public function getAddressHost($id_host)
     {
-        if($id == 1){
-            $result = Address::where('id_host', $id)->get();
-            $user = User::where('id', $result->id_host)->first();
-            $result->nickname=$user->nickname;
-            $result->avatar=$user->avatar;
-            $result->blogCount=BlogAddress::where('address_id', $result->address_id)->first();
-            $result->formCount=FormRegister::where('address_id', $result->address_id)->first();
-            if($result)
-            {
-                return response()->json([
-                    'data' => $result,
-                    'status' => 200,
-                    'message' => 'Get address by id host'
-                ]);
-            }else{
-                return response()->json([
-                    'status' => 400,
-                    'message' => 'Delete address fail'
-                ]);
-            }
+        $address = Address::where('id_host', $id_host)->get();
+        return response()->json([
+            'data' => $address,
+            'status' => 200,
+            'message' => 'Get address successfully'
+        ]);
+    }
+
+    public function getAddressByHost($address_id, $user_id)
+    {
+        $result = Address::where('address_id', $address_id)->where('id_host', $user_id)->first();
+        $user = User::where('id', $result->id_host)->first();
+        $result->nickname=$user->nickname;
+        $result->avatar=$user->avatar;
+        $discount = Discount::where('address_id', $address_id)->orderBy('created_at', 'desc')->first();
+        //$result->blogCount=BlogAddress::where('address_id', $result->address_id)->first();
+        //$result->formCount=FormRegister::where('address_id', $result->address_id)->first();
+        if($result)
+        {
+            return response()->json([
+                'data' => $result,
+                'discount' => $discount,
+                'status' => 200,
+                'message' => 'Get address by id host'
+            ]);
         }else{
             return response()->json([
                 'status' => 400,
-                'message' => 'You are not a host'
+                'message' => 'Address not found'
             ]);
         }
     }

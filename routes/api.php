@@ -41,7 +41,8 @@ Route::get('/address/{id}',[AddressController::class,'getEachAddress']);
 Route::post('/address/{id}',[AddressController::class,'editAddress']);
 Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
 
-Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']);
+Route::get('/address_by_host/{id}/{user_id}',[AddressController::class,'getAddressByHost']);
+Route::get('/addressHost/{user_id}',[AddressController::class,'getAddressHost']);
 
 // blog Address
 Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
