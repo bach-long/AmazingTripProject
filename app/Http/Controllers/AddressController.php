@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\DB;
+use App\Models\CommentBlogAddress;
+use App\Models\Group;
+use App\Models\ReactionBlogAddress;
 use Illuminate\Http\Request;
 use App\Models\Address;
 use App\Models\BlogAddress;
@@ -18,7 +20,7 @@ class AddressController extends Controller
             $i->nickname=$user->nickname;
             $i->avatar=$user->avatar;
             $i->blogCount=BlogAddress::where('address_id', $i->address_id)->first();
-            $i->formCount=FormRegister::where('address_id', $i->address_id)->first();
+           // $i->formCount=FormRegister::where('address_id', $i->address_id)->first();
         }
         return response()->json([
             'data' => $address,
@@ -75,9 +77,21 @@ class AddressController extends Controller
                     $item->nickname=$user->nickname;
                     $item->avatar=$user->avatar;
                     $item->blogCount=BlogAddress::where('address_id', $item->address_id)->first();
-                    $item->formCount=FormRegister::where('address_id', $item->address_id)->first();
+                    //$item->formCount=FormRegister::where('address_id', $item->address_id)->first();
+            $group = Group::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
+            $blog = BlogAddress::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
+            foreach($blog as $i){
+                $user = User::where('id', $i->id_user)->first();
+                $i->nickname=$user->nickname;
+                $i->avatar=$user->avatar;
+                $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
+                $i->likeCount = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
+                $i->dislikeCount=ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+            }
             return response()->json([
                 'data' => $item,
+                'group' => $group,
+                'blog' => $blog,
                 'status' => 200,
                 'message' => 'Founded address successfully'
             ]);

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BlogAddressController;
+use App\Http\Controllers\BlogAddressReactionController;
 use App\Http\Controllers\CommentBlogAddressController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AddressController;
@@ -53,21 +54,26 @@ Route::get('/addressesbydate',[AddressController::class,'AddressesByDate']);
 // blog Address
 Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
 Route::post('/blogAddress',[BlogAddressController::class,'postBlog']);
-Route::get('/blogaddresses',[BlogAddressController::class,'getAllBlogAddress']);
-Route::delete('/blogaddress',[BlogAddressController::class,'deleteBlog']);
+Route::delete('/blogAddress/{id}',[BlogAddressController::class,'deleteBlog']);
 
-Route::get('/blog',[BlogController::class,'getBlog']);
+Route::get('/blog/{id}',[BlogController::class,'getBlog']);
 Route::post('/blog',[BlogController::class,'postBlog']);
 Route::patch('/blog/{id}',[BlogController::class,'editBlog']);
 Route::delete('/blog/{id}',[BlogController::class,'deleteBlog']);
 
-Route::get('/bookmark/{id_user}',[BookmarkController::class,'getBookmark']);
+Route::post('/createComment',[CommentBlogController::class, 'createCommentBlog']);
+Route::get('/comments/{blog_id}',[CommentBlogController::class, 'getAllCommentBlog']);
+Route::patch('/editComment',[CommentBlogController::class, 'editCommentBlog']);
+Route::delete('/deleteComment/{comment_blog_id}',[CommentBlogController::class, 'deleteCommentBlog']);
+Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
+Route::get('/reactCheck/{blog_id}/{id_user}',[BlogReactionController::class, 'reactionCheck']);
+Route::delete('/unReaction/{blog_id}/{id_user}',[BlogReactionController::class, 'unReaction']);
+
+Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
 Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 
-Route::get('/group',[GroupController::class,'getGroup']);
-Route::get('/numberofgroups',[GroupController::class,'NumberofGroups']);
-Route::get('/groupsbydate',[GroupController::class,'GroupsByDate']);
+Route::get('/groupAddress/{address_id}',[GroupController::class,'getGroup']);
 Route::get('/group/{id}',[GroupController::class,'showGroup']) ; // show detail 1 group
 Route::post('/group',[GroupController::class,'postGroup']);
 Route::patch('/group/{id}',[GroupController::class,'editGroup']);
@@ -81,12 +87,15 @@ Route::get('/discount',[DiscountController::class,'getDiscount']);
 Route::post('/discount',[DiscountController::class,'postDiscount']);
 Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
+Route::get('/discount/address={address_id}',[DiscountController::class,'getFormDiscount']);
 
-Route::post('/createCommentBlog',[CommentBlogAddressController::class, 'createCommentBlog']);
+Route::post('/createCommentBlog/{blog_id}',[CommentBlogAddressController::class, 'createCommentBlog']);
 Route::get('/commentsBlog/{blog_id}',[CommentBlogAddressController::class, 'getAllCommentBlog']);
 Route::patch('/editCommentBlog',[CommentBlogAddressController::class, 'editCommentBlog']);
 Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressController::class, 'deleteCommentBlog']);
-Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
+Route::post('/reactAddressBlog',[BlogAddressReactionController::class, 'reactionUpdate']);
+Route::get('/reactAddressCheck/{blog_address_id}/{id_user}',[BlogAddressReactionController::class, 'reactionCheck']);
+Route::delete('/unReactionAddress/{blog_address_id}/{id_user}',[BlogAddressReactionController::class, 'unReaction']);
 
 Route::get('/getRegisters/{address_id}',[FormRegisterController::class, 'getRegisterListForAddress']);
 Route::post('/createForm',[FormRegisterController::class, 'postFormRegister']);

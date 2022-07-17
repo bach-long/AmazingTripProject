@@ -31,4 +31,37 @@ class BlogReactionController extends Controller
             ]);
         }
     }
+
+    public function reactionCheck($blog_id, $id_user){
+        $react = ReactionBlog::where('blog_id', $blog_id)->where('id_user', $id_user)->first();
+        if($react) {
+            return response()->json([
+                'data'=> $react,
+                'status'=>200,
+                'message'=>'Reacted'
+            ]);
+        } else {
+            return response()->json([
+                'data'=> [],
+                'status'=>400,
+                'message'=>'Not React'
+            ]);
+        }
+    }
+    public function unReaction($blog_id, $id_user){
+        $react = ReactionBlog::where('blog_id', $blog_id)->where('id_user', $id_user)->first();
+        if($react->delete()) {
+            return response()->json([
+                'data'=> [],
+                'status'=>200,
+                'message'=>'UnReacte Success'
+            ]);
+        } else {
+            return response()->json([
+                'data'=> [],
+                'status'=>400,
+                'message'=>'Not UnReact'
+            ]);
+        }
+    }
 }

@@ -14,7 +14,7 @@ class AddressSeeder extends Seeder
      */
     public function run()
     {
-        Address::factory()->times(5)->create();
+        Address::factory()->times(10)->create();
         //factory(App\Models\Address::class, 10)->create();
     }
 }
