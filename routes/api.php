@@ -43,6 +43,8 @@ Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
 
 Route::get('/address_by_host/{id}/{user_id}',[AddressController::class,'getAddressByHost']);
 Route::get('/addressHost/{user_id}',[AddressController::class,'getAddressHost']);
+Route::get('/listaddressbybookmark',[AddressController::class,'ListAddressByBookmark']);   // lấy 3 địa điểm có lượt theo dõi cao nhất
+Route::get('/listaddressbydiscount',[AddressController::class,'ListAddressByDiscount']);   // lấy 3 địa điểm có khuyến mãi cao nhất
 
 // blog Address
 Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
