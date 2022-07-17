@@ -90,7 +90,7 @@ Route::post('/reactAddressBlog',[BlogAddressReactionController::class, 'reaction
 Route::get('/reactAddressCheck/{blog_address_id}/{id_user}',[BlogAddressReactionController::class, 'reactionCheck']);
 Route::delete('/unReactionAddress/{blog_address_id}/{id_user}',[BlogAddressReactionController::class, 'unReaction']);
 
-Route::get('/getRegisters/address_id',[FormRegisterController::class, 'getRegisterListForAddress']);
+Route::get('/getRegisters/{address_id}',[FormRegisterController::class, 'getRegisterListForAddress']);
 Route::post('/createForm',[FormRegisterController::class, 'postFormRegister']);
 Route::patch('/editForm/{id}',[FormRegisterController::class, 'editFormRegister']);
 Route::delete('/deleteForm',[FormRegisterController::class, 'deleteFormRegister']);

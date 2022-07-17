@@ -74,8 +74,18 @@ class AddressController extends Controller
                     //$item->formCount=FormRegister::where('address_id', $item->address_id)->first();
             $group = Group::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
             $discount = Discount::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->first();
-            $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
-            $discount->quantity_registed = $registed;
+            if($discount) {
+                $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
+                $friendList = FormRegister::where('discount_id', $discount->discount_id)->get();
+                foreach ($friendList as $friend) {
+                    $user = User::where('id', $friend->id_user)->first();
+                    $friend->nickname = $user->nickname;
+                    $friend->avatar = $user->avatar;
+                }
+                $discount->quantity_registed = $registed;
+            } else {
+                $friendList = null;
+            }
             $blog = BlogAddress::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
             foreach($blog as $i){
                 $user = User::where('id', $i->id_user)->first();
@@ -90,6 +100,7 @@ class AddressController extends Controller
                 'group' => $group,
                 'blog' => $blog,
                 'discount' => $discount,
+                'friendList' => $friendList,
                 'status' => 200,
                 'message' => 'Founded address successfully'
             ]);
