@@ -111,7 +111,9 @@ class AddressController extends Controller
                     $i->reactStatus = null;
                 }
             }
-            $item->vote = $voteTotal / $voteCount;
+            if($voteCount != 0) {
+                $item->vote = $voteTotal / $voteCount;
+            }
             $bookmark = Bookmark::where('address_id', $address_id)->where('id_user', $id_user)->first();
             return response()->json([
                 'data' => $item,
