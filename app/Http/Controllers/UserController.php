@@ -10,21 +10,23 @@ use Illuminate\Http\Request;
 use App\Models\User;
 class UserController extends Controller
 {
-    public function getProfile($id){
-        if($id != 0){
-            $profile = User::find($id);
-            $follow = Follow::where('follower',$id)->get();
-            $list_follow = [];
-            if(!empty($follow[0]->being_follower))
-            {
-                $a = explode(',', $follow[0]->being_follower);
-                foreach($a as $i)
-                {
-                    $user = User::find($i);
-                    array_push($list_follow, $user);
-                }
-            }
-            $blog = BlogAddress::where('id_user',$id)
+    public function getProfile($user_id, $current_user_id){
+        if($user_id != 0){
+            $profile = User::find($user_id);
+            $follow = Follow::where('follower',$current_user_id)->where('being_follower',$user_id)->first();
+//            $list_follow = [];
+//            if(!empty($follow[0]->being_follower))
+//            {
+//                $a = explode(',', $follow[0]->being_follower);
+//                foreach($a as $i)
+//                {
+//                    $user = User::find($i);
+//                    array_push($list_follow, $user);
+//
+//                }
+//            }
+            $blog = BlogAddress::join('address','address.address_id','=','blog_address.address_id')
+                ->where('id_user',$user_id)
                 ->orderBy('blog_address.created_at', 'desc')
                 ->get();
             foreach($blog as $i) {
@@ -37,7 +39,7 @@ class UserController extends Controller
                     [
                         'status' => 200,
                         'data'=>$profile,
-                        'follow'=>$list_follow,
+                        'follow'=>$follow,
                         'blog'=>$blog
                     ]
                 );

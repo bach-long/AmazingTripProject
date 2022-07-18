@@ -32,7 +32,7 @@ use App\Http\Controllers\UserController;
 Route::post('/login',[LoginControler::class,'PostLogin']);
 Route::post('/register',[RegisterController::class,'PostRegister']);
 
-Route::get('/profile/{id}',[UserController::class,'getProfile']);
+Route::get('/profile/{user_id}/{current_user_id}',[UserController::class,'getProfile']);
 
 
 Route::get('/address',[AddressController::class,'getAddress']);
