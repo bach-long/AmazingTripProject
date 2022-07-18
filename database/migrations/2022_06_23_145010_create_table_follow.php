@@ -15,19 +15,14 @@ class CreateTableFollow extends Migration
     {
         Schema::create('follow', function (Blueprint $table) {
             $table->id('follow_id');
-            $table->bigInteger('follower')->unsigned();
-            $table->bigInteger('being_folower')->unsigned();
+            $table->bigInteger('follower')->unsigned()->references('id')->on('user_travel')
+                ->onDelete('CASCADE')
+                ->onUpdate('CASCADE');;
+            $table->bigInteger('being_folower')->unsigned() ->references('id')->on('user_travel')
+                ->onDelete('CASCADE')
+                ->onUpdate('CASCADE');;
             $table->unsignedInteger('follow_status')->default(0);  //0:unfollow 1: follow
             $table->timestamps();
-            
-            $table->foreign('follower')
-                ->references('id')->on('user_travel')
-                ->onDelete('CASCADE')
-                ->onUpdate('CASCADE');
-            $table->foreign('being_follower')
-                ->references('id')->on('user_travel')
-                ->onDelete('CASCADE')
-                ->onUpdate('CASCADE');
         });
     }
 
