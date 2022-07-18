@@ -19,23 +19,35 @@ class FollowController extends Controller
     public function postFollow(Request $req)
     {
         if($req){
-            $foll =  new Follow();
-            $foll->follow_id = $req->input('follow_id');
-            $foll->follwer = $req->input('follower');
-            $foll->being_follower = $req->input('being_follower');
-            if($foll->save()){
-                $follow = Follow::all();
+            $follow = Follow::where('follower', $req->follower)->where('being_follower', $req->being_follower)->orderBy('created_at', 'desc')->first();
+            if($follow)
+            {
+                $follow->follow_status = $req->follow_status;
+                $follow->save();
                 return response()->json([
                     'data' => $follow,
                     'status' => 200,
-                    'message' => 'Post follow successfully'
+                    'message' => 'Follow successfully'
                 ]);
-            }else{
-                return response()->json([
-                    'data' => $foll,
-                    'status' => 400,
-                    'message' => 'Post follow fail'
-                ]);
+            } else {
+                $follow =  new Follow();
+                $follow->follwer = $req->input('follower');
+                $follow->being_follower = $req->input('being_follower');
+                $follow->follow_status = $req->input('follow_status');
+                if($follow->save()){
+                    $follow = Follow::all();
+                    return response()->json([
+                        'data' => $follow,
+                        'status' => 200,
+                        'message' => 'Post follow successfully'
+                    ]);
+                }else{
+                    return response()->json([
+                        'data' => $follow,
+                        'status' => 400,
+                        'message' => 'Post follow fail'
+                    ]);
+                }
             }
         }else{
             return response()->json([
@@ -43,10 +55,10 @@ class FollowController extends Controller
                 'message' => 'Post follow false'
             ]);
         }
-        
-        
+
+
     }
-    
+
     public function deleteFollow($id)
     {
         if(Follow::find($id)){
@@ -56,7 +68,7 @@ class FollowController extends Controller
                     'data' => $follow,
                     'status' => 200,
                     'message' => 'Delete follow successfully'
-                ]); 
+                ]);
             }else{
                 return response()->json([
                     'status' => 400,

@@ -18,7 +18,7 @@ class CreateTableFollow extends Migration
             $table->bigInteger('follower')->unsigned()->references('id')->on('user_travel')
                 ->onDelete('CASCADE')
                 ->onUpdate('CASCADE');;
-            $table->bigInteger('being_folower')->unsigned() ->references('id')->on('user_travel')
+            $table->bigInteger('being_follower')->unsigned() ->references('id')->on('user_travel')
                 ->onDelete('CASCADE')
                 ->onUpdate('CASCADE');;
             $table->unsignedInteger('follow_status')->default(0);  //0:unfollow 1: follow
