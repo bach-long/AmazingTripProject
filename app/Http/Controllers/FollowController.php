@@ -31,7 +31,7 @@ class FollowController extends Controller
                 ]);
             } else {
                 $follow =  new Follow();
-                $follow->follwer = $req->input('follower');
+                $follow->follower = $req->input('follower');
                 $follow->being_follower = $req->input('being_follower');
                 $follow->follow_status = $req->input('follow_status');
                 if($follow->save()){

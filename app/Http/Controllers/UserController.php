@@ -24,8 +24,7 @@ class UserController extends Controller
                     array_push($list_follow, $user);
                 }
             }
-            $blog = BlogAddress::join('address','address.address_id','=','blog_address.address_id')
-                ->where('id_user',$id)
+            $blog = BlogAddress::where('id_user',$id)
                 ->orderBy('blog_address.created_at', 'desc')
                 ->get();
             foreach($blog as $i) {
