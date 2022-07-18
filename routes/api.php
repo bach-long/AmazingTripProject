@@ -37,7 +37,7 @@ Route::get('/profile/{id}',[UserController::class,'getProfile']);
 
 Route::get('/address',[AddressController::class,'getAddress']);
 Route::post('/address',[AddressController::class,'postAddress']);
-Route::get('/address/{id}',[AddressController::class,'getEachAddress']);
+Route::get('/address/{address_id}/{id_user}',[AddressController::class,'getEachAddress']);
 Route::post('/address/{id}',[AddressController::class,'editAddress']);
 Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
 
@@ -64,7 +64,8 @@ Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 Route::get('/reactCheck/{blog_id}/{id_user}',[BlogReactionController::class, 'reactionCheck']);
 Route::delete('/unReaction/{blog_id}/{id_user}',[BlogReactionController::class, 'unReaction']);
 
-Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
+Route::get('/bookmark/{id_user}',[BookmarkController::class,'getBookmark']);
+Route::get('/bookmark/{address_id}/{id_user}',[BookmarkController::class,'checkBookmark']);
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
 Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 

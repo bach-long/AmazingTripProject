@@ -13,6 +13,7 @@ class Bookmark extends Model
     protected $filltable=[
         'bookmark_id',
         'address_id',
+        'status',
         'id_user',
     ];
     public $timestamp= true;

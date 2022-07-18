@@ -65,10 +65,10 @@ class AddressController extends Controller
     }
 
 
-    public function getEachAddress(Request $req , $id)
+    public function getEachAddress($address_id, $id_user)
     {
-        $item = Address::find($id);
-        if($req){
+        $item = Address::find($address_id);
+        if($item){
             $user = User::where('id', $item->id_host)->first();
                     $item->nickname=$user->nickname;
                     $item->avatar=$user->avatar;
@@ -78,7 +78,7 @@ class AddressController extends Controller
             $discount = Discount::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->first();
             if($discount) {
                 $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
-                $friendList = FormRegister::where('discount_id', $discount->discount_id)->get();
+                $friendList = FormRegister::select('id_user')->where('discount_id', $discount->discount_id)->get();
                 foreach ($friendList as $friend) {
                     $user = User::where('id', $friend->id_user)->first();
                     $friend->nickname = $user->nickname;
@@ -89,20 +89,37 @@ class AddressController extends Controller
                 $friendList = null;
             }
             $blog = BlogAddress::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
+            $voteCount = 0;
+            $voteTotal = 0;
             foreach($blog as $i){
+                if($i->blog_address_vote)
+                {
+                    $voteCount += 1;
+                    $voteTotal += $i->blog_address_vote;
+                }
                 $user = User::where('id', $i->id_user)->first();
                 $i->nickname=$user->nickname;
                 $i->avatar=$user->avatar;
                 $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
                 $i->likeCount = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
                 $i->dislikeCount=ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+                $react = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('id_user', $id_user)->first();
+                if($react)
+                {
+                    $i->reactStatus = $react->reaction;
+                } else {
+                    $i->reactStatus = null;
+                }
             }
+            $item->vote = $voteTotal / $voteCount;
+            $bookmark = Bookmark::where('address_id', $address_id)->where('id_user', $id_user)->first();
             return response()->json([
                 'data' => $item,
                 'group' => $group,
                 'blog' => $blog,
                 'discount' => $discount,
                 'friendList' => $friendList,
+                'bookmark' => $bookmark,
                 'status' => 200,
                 'message' => 'Founded address successfully'
             ]);
@@ -183,6 +200,11 @@ class AddressController extends Controller
         $result->nickname=$user->nickname;
         $result->avatar=$user->avatar;
         $discount = Discount::where('address_id', $address_id)->orderBy('created_at', 'desc')->first();
+        if($discount)
+        {
+            $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
+            $discount->quantity_registed = $registed;
+        }
         //$result->blogCount=BlogAddress::where('address_id', $result->address_id)->first();
         //$result->formCount=FormRegister::where('address_id', $result->address_id)->first();
         if($result)

@@ -22,7 +22,6 @@ class UserController extends Controller
                 {
                     $user = User::find($i);
                     array_push($list_follow, $user);
-
                 }
             }
             $blog = BlogAddress::join('address','address.address_id','=','blog_address.address_id')

@@ -14,13 +14,14 @@ class CreateTableBookmark extends Migration
     public function up()
     {
         Schema::create('bookmark', function (Blueprint $table) {
-//            $table->id('bookmark_id');
-//            $table->bigInteger('address_id')->unsigned();
-//            $table->bigInteger('id_user')->unsigned();
-//            $table->timestamps();
-//
-//            $table->foreign('address_id','id_user')
-//                  ->references('address_id','id')->on('address','user_travel' );
+            $table->id('bookmark_id');
+            $table->bigInteger('address_id')->unsigned();
+            $table->integer('status');
+            $table->bigInteger('id_user')->unsigned();
+            $table->timestamps();
+
+            $table->foreign('address_id','id_user')
+                  ->references('address_id','id')->on('address','user_travel' );
         });
     }
 

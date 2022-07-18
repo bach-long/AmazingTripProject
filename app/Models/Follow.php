@@ -13,7 +13,8 @@ class Follow extends Model
     protected $fillable=[
         'follow_id',
         'follower',
-        'being_follower',               
+        'being_follower',
+        'follow_status'
     ];
     public $timestamps = true;
 }
