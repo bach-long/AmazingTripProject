@@ -15,12 +15,10 @@ class CreateTableBookmark extends Migration
     {
         Schema::create('bookmark', function (Blueprint $table) {
             $table->id('bookmark_id');
-            $table->bigInteger('address_id')->unsigned();
+            $table->bigInteger('address_id')->unsigned()->references('address_id','id')->on('address','user_travel' );;
+            $table->integer('status');
             $table->bigInteger('id_user')->unsigned();
             $table->timestamps();
-
-            $table->foreign('address_id')->references('address_id')->on('address')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('id_user')->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

@@ -20,7 +20,7 @@ class FormRegisterController extends Controller
             return response()->json([
                 'data' =>  $list,
                 'status' => 200,
-                'message' => 'success'
+                'message' => 'Get follow successfully'
             ]);
         } else {
             return response()->json([
@@ -37,14 +37,8 @@ class FormRegisterController extends Controller
             $form->id_user = $req->input('id_user');
             $form->quantity_registed = $req->input('quantity_registed');
             if($form->save()){
-                $data = FormRegister::where('address_id', $req->address_id)->get();
-                foreach($data as $i){
-                    $user = User::where('id', $i->id_user)->first();
-                    $i->nickname=$user->nickname;
-                    $i->avatar=$user->avatar;
-                }
                 return response()->json([
-                    'data' => $data,
+                    'data' => $form,
                     'status' => 200,
                     'message' => 'Post Form Register successfully'
                 ]);
@@ -88,7 +82,7 @@ class FormRegisterController extends Controller
         }
 
     }
-    
+
     public function deleteFormRegister($req)
     {
         if(FormRegister::find($req->id)){
@@ -103,7 +97,7 @@ class FormRegisterController extends Controller
                     'data' => $data,
                     'status' => 200,
                     'message' => 'Delete Discount successfully'
-                ]); 
+                ]);
             }else{
                 return response()->json([
                     'status' => 400,

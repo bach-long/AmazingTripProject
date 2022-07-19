@@ -33,23 +33,18 @@ Route::post('/login',[LoginControler::class,'PostLogin']);
 Route::post('/register',[RegisterController::class,'PostRegister']);
 
 Route::get('/profile/{id}',[UserController::class,'getProfile']);
-Route::get('/numberofusers',[UserController::class,'getNumberofUsers']);
-Route::get('/numberofhosts',[UserController::class,'getNumberofHosts']);
-Route::get('/infoofusers',[UserController::class,'getInfomationOfUsers']);
-Route::get('/infoofhosts',[UserController::class,'getInfomationOfHosts']);
-Route::delete('/delete/{id}',[UserController::class,'deleteUser']);
-Route::get('/usersbydate',[UserController::class,'getUsersByDate']);
-Route::get('/hostsbydate',[UserController::class,'getHostsByDate']);
 
 
 Route::get('/address',[AddressController::class,'getAddress']);
 Route::post('/address',[AddressController::class,'postAddress']);
-Route::get('/address/{id}',[AddressController::class,'getEachAddress']);
+Route::get('/address/{address_id}/{id_user}',[AddressController::class,'getEachAddress']);
 Route::post('/address/{id}',[AddressController::class,'editAddress']);
 Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
-Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']);
-Route::get('/numberofaddresses',[AddressController::class,'getNumberofAddress']);
-Route::get('/addressesbydate',[AddressController::class,'AddressesByDate']);
+
+Route::get('/address_by_host/{id}/{user_id}',[AddressController::class,'getAddressByHost']);
+Route::get('/addressHost/{user_id}',[AddressController::class,'getAddressHost']);
+Route::get('/listaddressbybookmark',[AddressController::class,'ListAddressByBookmark']);   // lấy 3 địa điểm có lượt theo dõi cao nhất
+Route::get('/listaddressbydiscount',[AddressController::class,'ListAddressByDiscount']);   // lấy 3 địa điểm có khuyến mãi cao nhất
 
 // blog Address
 Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
@@ -69,7 +64,8 @@ Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 Route::get('/reactCheck/{blog_id}/{id_user}',[BlogReactionController::class, 'reactionCheck']);
 Route::delete('/unReaction/{blog_id}/{id_user}',[BlogReactionController::class, 'unReaction']);
 
-Route::get('/bookmark',[BookmarkController::class,'getBookmark']);
+Route::get('/bookmark/{id_user}',[BookmarkController::class,'getBookmark']);
+Route::get('/bookmark/{address_id}/{id_user}',[BookmarkController::class,'checkBookmark']);
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
 Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 

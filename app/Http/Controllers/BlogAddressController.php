@@ -10,7 +10,7 @@ use App\Models\User;
 
 class BlogAddressController extends Controller
 {
-    public function getBlog(Request $req, $address_id)
+    public function getBlog($address_id)
     {
         $blog = BlogAddress::where('address_id', $address_id)->get();
         foreach($blog as $i){

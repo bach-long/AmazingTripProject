@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\CommentBlogAddress;
+use App\Models\Discount;
 use App\Models\Group;
 use App\Models\ReactionBlogAddress;
 use Illuminate\Http\Request;
@@ -9,7 +10,9 @@ use App\Models\Address;
 use App\Models\BlogAddress;
 use App\Models\FormRegister;
 use App\Models\User;
-
+use App\Models\Bookmark;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 class AddressController extends Controller
 {
     public function getAddress()
@@ -38,14 +41,7 @@ class AddressController extends Controller
             $add->address_image = $req->input('address_image');
             $add->address_map = $req->input('address_map');
             if($add->save()){
-                $address = Address::where('id_host', $req->id_host)->get();
-                foreach($address as $i){
-                    $user = User::where('id', $i->id_host)->first();
-                    $i->nickname=$user->nickname;
-                    $i->avatar=$user->avatar;
-                    $i->blogCount=BlogAddress::where('address_id', $i->address_id)->first();
-                    $i->formCount=FormRegister::where('address_id', $i->address_id)->first();
-                }
+                $address = Address::where('id_host', $req->id_host)->orderBy('created_at', 'desc')->first();
                 return response()->json([
                     'data' => $address,
                     'status' => 200,
@@ -69,29 +65,63 @@ class AddressController extends Controller
     }
 
 
-    public function getEachAddress(Request $req , $id)
+    public function getEachAddress($address_id, $id_user)
     {
-        $item = Address::find($id);
-        if($req){
+        $item = Address::find($address_id);
+        if($item){
             $user = User::where('id', $item->id_host)->first();
                     $item->nickname=$user->nickname;
                     $item->avatar=$user->avatar;
                     $item->blogCount=BlogAddress::where('address_id', $item->address_id)->first();
                     //$item->formCount=FormRegister::where('address_id', $item->address_id)->first();
             $group = Group::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
+            $discount = Discount::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->first();
+            if($discount) {
+                $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
+                $friendList = FormRegister::select('id_user')->where('discount_id', $discount->discount_id)->get();
+                foreach ($friendList as $friend) {
+                    $user = User::where('id', $friend->id_user)->first();
+                    $friend->nickname = $user->nickname;
+                    $friend->avatar = $user->avatar;
+                }
+                $discount->quantity_registed = $registed;
+            } else {
+                $friendList = null;
+            }
             $blog = BlogAddress::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
+            $voteCount = 0;
+            $voteTotal = 0;
             foreach($blog as $i){
+                if($i->blog_address_vote)
+                {
+                    $voteCount += 1;
+                    $voteTotal += $i->blog_address_vote;
+                }
                 $user = User::where('id', $i->id_user)->first();
                 $i->nickname=$user->nickname;
                 $i->avatar=$user->avatar;
                 $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
                 $i->likeCount = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
                 $i->dislikeCount=ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+                $react = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('id_user', $id_user)->first();
+                if($react)
+                {
+                    $i->reactStatus = $react->reaction;
+                } else {
+                    $i->reactStatus = null;
+                }
             }
+            if($voteCount != 0) {
+                $item->vote = $voteTotal / $voteCount;
+            }
+            $bookmark = Bookmark::where('address_id', $address_id)->where('id_user', $id_user)->first();
             return response()->json([
                 'data' => $item,
                 'group' => $group,
                 'blog' => $blog,
+                'discount' => $discount,
+                'friendList' => $friendList,
+                'bookmark' => $bookmark,
                 'status' => 200,
                 'message' => 'Founded address successfully'
             ]);
@@ -155,34 +185,88 @@ class AddressController extends Controller
         }
     }
 
-    public function getAddressByHost($id)
+    public function getAddressHost($id_host)
     {
-        if($id == 1){
-            $result = Address::where('id_host', $id)->get();
-            $user = User::where('id', $result->id_host)->first();
-            $result->nickname=$user->nickname;
-            $result->avatar=$user->avatar;
-            $result->blogCount=BlogAddress::where('address_id', $result->address_id)->first();
-            $result->formCount=FormRegister::where('address_id', $result->address_id)->first();
-            if($result)
-            {
-                return response()->json([
-                    'data' => $result,
-                    'status' => 200,
-                    'message' => 'Get address by id host'
-                ]);
-            }else{
-                return response()->json([
-                    'status' => 400,
-                    'message' => 'Delete address fail'
-                ]);
-            }
+        $address = Address::where('id_host', $id_host)->get();
+        return response()->json([
+            'data' => $address,
+            'status' => 200,
+            'message' => 'Get address successfully'
+        ]);
+    }
+
+    public function getAddressByHost($address_id, $user_id)
+    {
+        $result = Address::where('address_id', $address_id)->where('id_host', $user_id)->first();
+        $user = User::where('id', $result->id_host)->first();
+        $result->nickname=$user->nickname;
+        $result->avatar=$user->avatar;
+        $discount = Discount::where('address_id', $address_id)->orderBy('created_at', 'desc')->first();
+        if($discount)
+        {
+            $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
+            $discount->quantity_registed = $registed;
+        }
+        //$result->blogCount=BlogAddress::where('address_id', $result->address_id)->first();
+        //$result->formCount=FormRegister::where('address_id', $result->address_id)->first();
+        if($result)
+        {
+            return response()->json([
+                'data' => $result,
+                'discount' => $discount,
+                'status' => 200,
+                'message' => 'Get address by id host'
+            ]);
         }else{
             return response()->json([
                 'status' => 400,
-                'message' => 'You are not a host'
+                'message' => 'Address not found'
             ]);
         }
     }
 
+    //tìm 3 address có lươt theo dõi nhiều nhất
+    public function ListAddressByBookmark(){
+            $address= Address::all();
+            $address_count= Address::all()->count();
+            foreach($address as $add){
+                $add->count= Bookmark::where('address_id',$add->address_id)->count();
+            }
+            for($i=0;$i<$address_count;$i++){
+                $max=$address[0];
+                for($j=$i+1;$j<$address_count;$j++){
+                    if($address[$j]->count>$address[$i]->count){
+                        $max=$address[$i];
+                        $address[$i]=$address[$j];
+                        $address[$j]=$max;
+                    }
+                }
+            }
+           return response()->json([
+                'data1'=>$address[0],
+                'data2'=>$address[1],
+                'data3'=>$address[2],
+                'status'=>200,
+                'message'=>'get address succesfully'
+            ]);
+    }
+
+    //tìm 3 address có lượt khuyến mãi cao nhất
+    public function ListAddressByDiscount(){
+
+        $discount= DB::table('discount')->orderBy('discount_rate','desc')->get();
+        $i=0;
+        foreach($discount as $dis){
+            $address[$i]= Address::where('address_id',$dis->address_id)->first();
+            //$address->discount= $dis->discount_rate;
+            $i++;
+        }
+        return response()->json([
+            'data1'=>$address[0],
+            'data2'=>$address[1],
+            'data3'=>$address[2],
+            'status'=>200,
+            'message'=>'get address succesfully'
+        ]);
+    }
 }
