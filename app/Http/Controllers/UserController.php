@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\BlogAddress;
+use App\Models\Bookmark;
 use App\Models\CommentBlogAddress;
 use App\Models\Follow;
 use App\Models\ReactionBlogAddress;
@@ -41,6 +43,49 @@ class UserController extends Controller
                         'data'=>$profile,
                         'follow'=>$follow,
                         'blog'=>$blog
+                    ]
+                );
+            }else{
+                return response()->json(
+                    [
+                        'status' => 400,
+                        'message' => 'Get profile fail'
+                    ]
+                );
+            }
+        }
+    }
+
+
+    public function getUserData($user_id){
+        if($user_id != 0){
+            $user = User::find($user_id);
+            $bookmark = Bookmark::where('id_user', $user_id)->get();
+            if($bookmark)
+            {
+                foreach($bookmark as $each)
+                {
+                    $inf = Address::where('address_id', $each->address_id)->first();
+                    $each->address_name = $inf->address_name;
+                }
+            }
+            $follow = Follow::where('follower',$user_id)->where('follow_status', '=', '1')->get();
+            if($follow)
+            {
+                foreach($follow as $follower)
+                {
+                    $inf = User::select('nickname', 'avatar')->where('id', $follower->being_follower)->first();
+                    $follower->nickname = $inf->nickname;
+                    $follower->avatar = $inf->avatar;
+                }
+            }
+            if($user){
+                return response()->json(
+                    [
+                        'bookmark'=>$bookmark,
+                        'follow'=>$follow,
+                        'status' => 200,
+                        'message' => 'Get profile successfully'
                     ]
                 );
             }else{

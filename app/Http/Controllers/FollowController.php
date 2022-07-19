@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Follow;
 
@@ -24,6 +25,9 @@ class FollowController extends Controller
             {
                 $follow->follow_status = $req->follow_status;
                 $follow->save();
+                $user = User::select('nickname', 'avatar')->where('id', $follow->being_follower)->first();
+                $follow->nickname = $user->nickname;
+                $follow->avatar = $user->avatar;
                 return response()->json([
                     'data' => $follow,
                     'status' => 200,
@@ -35,7 +39,10 @@ class FollowController extends Controller
                 $follow->being_follower = $req->input('being_follower');
                 $follow->follow_status = $req->input('follow_status');
                 if($follow->save()){
-                    $follow = Follow::all();
+                    $follow = Follow::where('follower', $req->follower)->where('being_follower', $req->being_follower)->orderBy('created_at', 'desc')->first();
+                    $user = User::select('nickname', 'avatar')->where('id', $follow->being_follower)->first();
+                    $follow->nickname = $user->nickname;
+                    $follow->avatar = $user->avatar;
                     return response()->json([
                         'data' => $follow,
                         'status' => 200,

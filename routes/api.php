@@ -33,6 +33,7 @@ Route::post('/login',[LoginControler::class,'PostLogin']);
 Route::post('/register',[RegisterController::class,'PostRegister']);
 
 Route::get('/profile/{user_id}/{current_user_id}',[UserController::class,'getProfile']);
+Route::get('/user/{user_id}',[UserController::class,'getUserData']);
 
 
 Route::get('/address',[AddressController::class,'getAddress']);
