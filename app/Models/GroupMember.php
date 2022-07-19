@@ -12,7 +12,11 @@ class GroupMember extends Model
     protected $primaryKey= 'group_members_id';
     protected $fillable=[
         'group_id',
-        'id_user'     
+        'id_user'
     ];
     public $timestamps = true;
+
+    public static function count(string $string)
+    {
+    }
 }

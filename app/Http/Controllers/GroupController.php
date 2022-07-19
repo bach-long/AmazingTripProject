@@ -3,41 +3,119 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
+use App\Models\GroupMember;
 use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class GroupController extends Controller
 {
     public function getGroup($address_id)
     {
-        $group= Group::where('address_id', $address_id)->get();
+        $group= Group::query()
+            ->where('address_id', $address_id)
+            ->get();
         return response()->json([
             'data'=>$group,
             'status'=>200,
-            'message'=>'Get group successfullly'
+            'message'=>'Get group successfully'
         ]);
     }
 
     public function showGroup($id)
     {
-        $group= Group::where('group_id', $id)->first();
-        $admin = User::where('id', $group->group_admin)->first();
-        $address = Address::where('address_id', $group->address_id)->first();
-        $group->admin_name = $admin->nickname;
-        $group->admin_image = $admin->avatar;
-        $group->address = $address->address_map;
+        $group= DB::table('Group')
+            ->join('User_travel', 'Group.group_admin', '=', 'User_travel.id')
+            ->join('Address', 'Group.address_id', '=', 'Address.address_id')
+            ->select('Group.*',
+                'User_travel.nickname',
+                'User_travel.avatar',
+                'Address.address_map',
+            )
+            ->where('Group.group_id', $id)
+            ->first();
+
+        $group_member = DB::table('Group_members')
+            ->select(DB::raw('count(id_user) as number_member'))
+            ->where('group_id', '=', $group->group_id)
+            ->groupBy('group_id')
+            ->first();
+
+        if($group_member)
+            $group->number_member = $group_member->number_member + 1;
+        else
+            $group->number_member = 1;
+
+        $members = DB::table('Group_members')
+            ->join('User_travel', 'Group_members.id_user', '=', 'User_travel.id')
+            ->select('User_travel.id',
+                'User_travel.nickname',
+                'User_travel.avatar',
+            )
+            ->where('group_id', '=', $group->group_id)
+            ->get();
+
         if($group) {
             return response()->json([
                 'data' => $group,
+                'members' => $members,
                 'status' => 200,
-                'message' => 'Get group successfullly'
+                'message' => 'Get group successfully'
             ]);
         } else {
             return response()->json([
                 'data' => $group,
                 'status' => 400,
                 'message' => 'Get group false'
+            ]);
+        }
+    }
+
+    public function joinGroup(Request $request)
+    {
+        $group_member= new GroupMember();
+        $group_member->group_id=$request->input('group_id');
+        $group_member->id_user=$request->input('id_user');
+
+        if($group_member->save()){
+            $group_member = GroupMember::query()
+                ->where('group_id', $group_member->group_id)
+                ->where('id_user', $group_member->id_user)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            return response()->json([
+                'data'=>$group_member,
+                'status'=>200,
+                'message'=>'success'
+            ]);
+        }else{
+            return response()->json([
+                'status'=>400,
+                'message'=>'false'
+
+            ]);
+        }
+    }
+
+    public function outGroup($group_id, $id_user)
+    {
+        $group_member = GroupMember::query()
+            ->where('group_id', $group_id)
+            ->where('id_user', $id_user)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if($group_member->delete()){
+            return response()->json([
+                'data'=>[],
+                'status'=>200,
+                'message'=>'success'
+            ]);
+        }else{
+            return response()->json([
+                'status'=>400,
+                'message'=>'false'
+
             ]);
         }
     }

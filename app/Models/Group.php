@@ -16,7 +16,11 @@ class Group extends Model
         'group_image',
         'address_id',
         'group_admin',
-        'group_member'     
+        'group_member'
     ];
     public $timestamps = true;
+    /**
+     * @var mixed
+     */
+
 }

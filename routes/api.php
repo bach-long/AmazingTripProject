@@ -72,6 +72,8 @@ Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 
 Route::get('/groupAddress/{address_id}',[GroupController::class,'getGroup']);
 Route::get('/group/{id}',[GroupController::class,'showGroup']) ; // show detail 1 group
+Route::post('/joinGroup',[GroupController::class,'joinGroup']);
+Route::delete('/outGroup/{group_id}/{id_user}',[GroupController::class,'outGroup']);
 Route::post('/group',[GroupController::class,'postGroup']);
 Route::patch('/group/{id}',[GroupController::class,'editGroup']);
 Route::delete('/group/{id}',[GroupController::class,'deleteGroup']);
