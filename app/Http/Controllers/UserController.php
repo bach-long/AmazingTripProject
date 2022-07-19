@@ -59,6 +59,13 @@ class UserController extends Controller
                 $i->commentCount = CommentBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->count();
                 $i->likeCount = ReactionBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
                 $i->dislikeCount = ReactionBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+                $react = ReactionBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->where('id_user', $current_user_id)->first();
+                if($react)
+                {
+                    $i->reactStatus = $react->reaction;
+                } else {
+                    $i->reactStatus = null;
+                }
             }
             if ($profile) {
                 return response()->json(
