@@ -17,7 +17,7 @@ class CreateTableBookmark extends Migration
             $table->id('bookmark_id');
             $table->bigInteger('address_id')->unsigned()->references('address_id','id')->on('address','user_travel' );;
             $table->integer('status');
-            $table->bigInteger('id_user')->unsigned();
+            $table->bigInteger('id_user')->unsigned()->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');;
             $table->timestamps();
         });
     }

@@ -50,7 +50,7 @@ class GroupController extends Controller
     public function postGroup(Request $request)
     {
          if($request){
-            $Group= new Group;
+            $Group= new Group();
             $Group->group_name=$request->input('group_name');
             $Group->group_image=$request->input('group_image');
             $Group->address_id=$request->input('address_id');
@@ -65,7 +65,6 @@ class GroupController extends Controller
                 ]);
             }else{
                 return response()->json([
-                    'data'=>$Group,
                     'status'=>400,
                     'message'=>'false'
 
