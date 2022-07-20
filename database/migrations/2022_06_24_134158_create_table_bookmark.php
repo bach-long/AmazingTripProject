@@ -16,8 +16,8 @@ class CreateTableBookmark extends Migration
         Schema::create('bookmark', function (Blueprint $table) {
             $table->id('bookmark_id');
             $table->bigInteger('address_id')->unsigned()->references('address_id','id')->on('address','user_travel' );;
+            $table->bigInteger('id_user')->unsigned()->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('status');
-            $table->bigInteger('id_user')->unsigned()->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');;
             $table->timestamps();
         });
     }

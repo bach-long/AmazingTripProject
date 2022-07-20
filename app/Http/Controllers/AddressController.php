@@ -225,9 +225,10 @@ class AddressController extends Controller
         }
     }
 
-    //tìm 3 address có lươt theo dõi nhiều nhất
+    //tìm danh sách address theo lượt theo dõi nhiều nhất
     public function ListAddressByBookmark(){
-            $address= Address::all();
+        $address= Address::all();
+        if($address){
             $address_count= Address::all()->count();
             foreach($address as $add){
                 $add->count= Bookmark::where('address_id',$add->address_id)->count();
@@ -242,31 +243,62 @@ class AddressController extends Controller
                     }
                 }
             }
-           return response()->json([
-                'data1'=>$address[0],
-                'data2'=>$address[1],
-                'data3'=>$address[2],
+            return response()->json([
+                'data'=>$address,
                 'status'=>200,
                 'message'=>'get address succesfully'
             ]);
+        }
+        else{
+            return response()->json([
+                'status'=>400,
+                'message'=>'have no address'
+            ]);
+        }
     }
 
-    //tìm 3 address có lượt khuyến mãi cao nhất
+    //tìm danh sách address có theo  khuyến mãi
     public function ListAddressByDiscount(){
-
-        $discount= DB::table('discount')->orderBy('discount_rate','desc')->get();
-        $i=0;
-        foreach($discount as $dis){
-            $address[$i]= Address::where('address_id',$dis->address_id)->first();
-            //$address->discount= $dis->discount_rate;
-            $i++;
+        $address= DB::table('address')
+                 ->join('discount','address.address_id','=','discount.address_id')
+                 ->select('address.*','discount.discount_rate')
+                 ->orderBy('discount.discount_rate','desc')->get();
+        if($address){
+            return response()->json([
+                'data'=>$address,
+                'status'=>200,
+                'message'=>'get address succesfully'
+            ]);
         }
-        return response()->json([
-            'data1'=>$address[0],
-            'data2'=>$address[1],
-            'data3'=>$address[2],
-            'status'=>200,
-            'message'=>'get address succesfully'
-        ]);
+        else{
+            return response()->json([
+                'status'=>400,
+                'message'=>'Have no address'
+            ]);
+        }
+       
+    }
+
+    // danh sách tất cả address đã theo dõi ( sắp xếp theo thời gian)
+    public function ListAddressBookmarked($id_user){
+        $address= DB::table('address')
+                ->join('bookmark','address.address_id','=','bookmark.address_id')
+                ->select('address.*')
+                ->where('bookmark.id_user','=',$id_user)
+                ->where('bookmark.status','=',1)
+                ->orderBy('created_at','desc')->get();
+        if($address){
+            return response()->json([
+                'data'=>$address,
+                'status'=>200,
+                'message'=>'get address succesfully'
+            ]);
+        }
+        else{
+            return response()->json([
+                'status'=>400,
+                'message'=>'Have no address'
+            ]);
+        }
     }
 }
