@@ -326,9 +326,11 @@ class AddressController extends Controller
                 ->where('bookmark.id_user','=',$id_user)
                 ->where('bookmark.status','=',1)
                 ->orderBy('created_at','desc')->get();
+        $count = Bookmark::where('id_user',$id_user)->count();
         if($address){
             return response()->json([
                 'data'=>$address,
+                'count'=>$count,
                 'status'=>200,
                 'message'=>'get address succesfully'
             ]);
