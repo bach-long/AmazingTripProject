@@ -67,28 +67,67 @@ class AddressController extends Controller
 
     public function getEachAddress($address_id, $id_user)
     {
-        $item = Address::find($address_id);
-        if($item){
-            $user = User::where('id', $item->id_host)->first();
-                    $item->nickname=$user->nickname;
-                    $item->avatar=$user->avatar;
-                    $item->blogCount=BlogAddress::where('address_id', $item->address_id)->first();
-                    //$item->formCount=FormRegister::where('address_id', $item->address_id)->first();
-            $group = Group::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
-            $discount = Discount::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->first();
+        // Get Address Data
+        $address = Address::query()
+            ->join('user_travel', 'address.id_host', '=', 'user_travel.id')
+            ->where('address_id', '=', $address_id)
+            ->select('address.address_id',
+                'address.address_name',
+                'address.address_description',
+                'address.address_image',
+                'address.address_map',
+                'user_travel.id',
+                'user_travel.nickname',
+                'user_travel.avatar'
+            )
+            ->first();
+        if($address)
+        {
+            // Get group address data
+            $group = Group::query()
+                ->select('group_id', 'group_name')
+                ->where('address_id', '=', $address->address_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            // Get discount data
+            $discount = Discount::query()
+                ->select('discount.discount_id',
+                    'discount.time_start',
+                    'discount.time_finish',
+                    'discount.discount_rate',
+                    'discount.discount_quantity'
+                )
+                ->where('discount.address_id', '=', $address->address_id)
+                ->first();
             if($discount) {
-                $registed = FormRegister::where('discount_id', $discount->discount_id)->sum('quantity_registed');
-                $friendList = FormRegister::select('id_user')->where('discount_id', $discount->discount_id)->get();
-                foreach ($friendList as $friend) {
-                    $user = User::where('id', $friend->id_user)->first();
-                    $friend->nickname = $user->nickname;
-                    $friend->avatar = $user->avatar;
-                }
+                $registed = FormRegister::query()->where('discount_id', $discount->discount_id)->sum('quantity_registed');
                 $discount->quantity_registed = $registed;
+                $friendList = FormRegister::query()
+                    ->join('user_travel', 'form_registed.id_user', '=', 'user_travel.id')
+                    ->select('user_travel.id as id_user',
+                        'user_travel.nickname',
+                        'user_travel.avatar'
+                    )
+                    ->where('discount_id', $discount->discount_id)
+                    ->get();
             } else {
                 $friendList = null;
             }
-            $blog = BlogAddress::where('address_id', $item->address_id)->orderBy('created_at', 'desc')->get();
+            $blog = BlogAddress::query()
+                ->join('user_travel', 'blog_address.id_user', '=', 'user_travel.id')
+                ->select('blog_address.blog_address_id',
+                    'blog_address.blog_address_vote',
+                    'blog_address.blog_address_image',
+                    'blog_address.blog_address_content',
+                    'blog_address.created_at',
+                    'user_travel.id',
+                    'user_travel.avatar',
+                    'user_travel.nickname'
+                )
+                ->where('address_id', $address->address_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
             $voteCount = 0;
             $voteTotal = 0;
             foreach($blog as $i){
@@ -97,13 +136,10 @@ class AddressController extends Controller
                     $voteCount += 1;
                     $voteTotal += $i->blog_address_vote;
                 }
-                $user = User::where('id', $i->id_user)->first();
-                $i->nickname=$user->nickname;
-                $i->avatar=$user->avatar;
-                $i->commentCount = CommentBlogAddress::where('blog_address_id', $i->blog_address_id)->count();
-                $i->likeCount = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
-                $i->dislikeCount=ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
-                $react = ReactionBlogAddress::where('blog_address_id', $i->blog_address_id)->where('id_user', $id_user)->first();
+                $i->commentCount = CommentBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->count();
+                $i->likeCount = ReactionBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->where('reaction', 1)->count();
+                $i->dislikeCount=ReactionBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->where('reaction', 0)->count();
+                $react = ReactionBlogAddress::query()->where('blog_address_id', $i->blog_address_id)->where('id_user', $id_user)->first();
                 if($react)
                 {
                     $i->reactStatus = $react->reaction;
@@ -112,11 +148,14 @@ class AddressController extends Controller
                 }
             }
             if($voteCount != 0) {
-                $item->vote = $voteTotal / $voteCount;
+                $address->vote = $voteTotal / $voteCount;
             }
-            $bookmark = Bookmark::where('address_id', $address_id)->where('id_user', $id_user)->first();
+            $bookmark = Bookmark::query()
+                ->where('address_id', $address_id)
+                ->where('id_user', $id_user)
+                ->first();
             return response()->json([
-                'data' => $item,
+                'address' => $address,
                 'group' => $group,
                 'blog' => $blog,
                 'discount' => $discount,

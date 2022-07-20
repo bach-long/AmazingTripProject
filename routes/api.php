@@ -99,6 +99,6 @@ Route::delete('/unReactionAddress/{blog_address_id}/{id_user}',[BlogAddressReact
 Route::get('/getRegisters/{address_id}',[FormRegisterController::class, 'getRegisterListForAddress']);
 Route::post('/createForm',[FormRegisterController::class, 'postFormRegister']);
 Route::patch('/editForm/{id}',[FormRegisterController::class, 'editFormRegister']);
-Route::delete('/deleteForm',[FormRegisterController::class, 'deleteFormRegister']);
+Route::delete('/deleteForm/{discount_id}/{id_user}',[FormRegisterController::class, 'deleteFormRegister']);
 //Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);
 

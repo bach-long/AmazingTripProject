@@ -37,8 +37,17 @@ class FormRegisterController extends Controller
             $form->id_user = $req->input('id_user');
             $form->quantity_registed = $req->input('quantity_registed');
             if($form->save()){
+                $friend = FormRegister::query()
+                    ->join('user_travel', 'form_registed.id_user', '=', 'user_travel.id')
+                    ->select('user_travel.id',
+                        'user_travel.nickname',
+                        'user_travel.avatar'
+                    )
+                    ->where('form_registed.discount_id', '=', $form->discount_id)
+                    ->where('form_registed.id_user', '=', $form->id_user)
+                    ->first();
                 return response()->json([
-                    'data' => $form,
+                    'data' => $friend,
                     'status' => 200,
                     'message' => 'Post Form Register successfully'
                 ]);
@@ -83,16 +92,15 @@ class FormRegisterController extends Controller
 
     }
 
-    public function deleteFormRegister($req)
+    public function deleteFormRegister($discount_id, $id_user)
     {
-        if(FormRegister::find($req->id)){
-            if(FormRegister::find($req->id)->delete()){
-                $data = FormRegister::where('address_id', $req->address_id)->get();
-                foreach($data as $i){
-                    $user = User::where('id', $i->id_user)->first();
-                    $i->nickname=$user->nickname;
-                    $i->avatar=$user->avatar;
-                }
+        $data = FormRegister::query()
+            ->where('discount_id', '=', $discount_id)
+            ->where('id_user', '=', $id_user)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        if($data){
+            if($data->delete()){
                 return response()->json([
                     'data' => $data,
                     'status' => 200,
