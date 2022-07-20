@@ -20,12 +20,6 @@ class FollowController extends Controller
     public function postFollow(Request $req)
     {
         $follow = Follow::query()
-            ->join('user_travel', 'follow.being_follower', '=', 'user_travel.id')
-            ->select('user_travel.id',
-                'user_travel.nickname',
-                'user_travel.avatar',
-                'follow.follow_status'
-            )
             ->where('follow.follower', $req->follower)
             ->where('follow.being_follower', $req->being_follower)
             ->orderBy('follow.created_at', 'desc')
@@ -33,8 +27,19 @@ class FollowController extends Controller
         if ($follow) {
             $follow->follow_status = $req->follow_status;
             $follow->save();
+            $follow2 = Follow::query()
+                ->join('user_travel', 'follow.being_follower', '=', 'user_travel.id')
+                ->select('user_travel.id',
+                    'user_travel.nickname',
+                    'user_travel.avatar',
+                    'follow.follow_status'
+                )
+                ->where('follow.follower', $req->follower)
+                ->where('follow.being_follower', $req->being_follower)
+                ->orderBy('follow.created_at', 'desc')
+                ->first();
             return response()->json([
-                'data' => $follow,
+                'data' => $follow2,
                 'status' => 200,
                 'message' => 'Follow successfully'
             ]);

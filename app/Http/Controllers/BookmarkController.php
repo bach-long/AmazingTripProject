@@ -62,13 +62,13 @@ class BookmarkController extends Controller
                 $book->status = $req->input('status');
                 if($book->save()){
                     return response()->json([
-                        'data' => 1, //1 for +, 0 for -
+                        'data' => $book, //1 for +, 0 for -
                         'status' => 200,
                         'message' => 'Bookmark successfully'
                     ]);
                 }else{
                     return response()->json([
-                        'data' => 0,
+                        'data' => $book,
                         'status' => 400,
                         'message' => 'Bookmark failed'
                     ]);

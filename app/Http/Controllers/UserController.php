@@ -93,7 +93,8 @@ class UserController extends Controller
             $bookmark = Bookmark::query()
                 ->join('address', 'bookmark.address_id', '=', 'address.address_id')
                 ->select('address.address_id', 'address.address_name')
-                ->where('id_user', $user_id)
+                ->where('id_user', '=', $user_id)
+                ->where('status', '=', '1')
                 ->get();
 
             $follow = Follow::query()

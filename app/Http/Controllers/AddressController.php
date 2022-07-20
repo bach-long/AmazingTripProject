@@ -112,7 +112,7 @@ class AddressController extends Controller
                     ->where('discount_id', $discount->discount_id)
                     ->get();
             } else {
-                $friendList = null;
+                $friendList = [];
             }
             $blog = BlogAddress::query()
                 ->join('user_travel', 'blog_address.id_user', '=', 'user_travel.id')
@@ -151,8 +151,9 @@ class AddressController extends Controller
                 $address->vote = $voteTotal / $voteCount;
             }
             $bookmark = Bookmark::query()
-                ->where('address_id', $address_id)
-                ->where('id_user', $id_user)
+                ->where('address_id', '=', $address_id)
+                ->where('id_user', '=', $id_user)
+                ->where('status', '=','1')
                 ->first();
             return response()->json([
                 'address' => $address,
