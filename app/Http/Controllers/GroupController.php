@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\GroupMember;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Group;
 use App\Models\User;
@@ -43,9 +44,9 @@ class GroupController extends Controller
             ->first();
 
         if($group_member)
-            $group->number_member = $group_member->number_member + 1;
+            $group->number_member = $group_member->number_member;
         else
-            $group->number_member = 1;
+            $group->number_member = 0;
 
         $members = DB::table('Group_members')
             ->join('User_travel', 'Group_members.id_user', '=', 'User_travel.id')
@@ -123,19 +124,28 @@ class GroupController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function postGroup(Request $request)
     {
          if($request){
-            $Group= new Group();
-            $Group->group_name=$request->input('group_name');
-            $Group->group_image=$request->input('group_image');
-            $Group->address_id=$request->input('address_id');
-            $Group->group_admin= $request->input('group_admin');
-            //$Group->group_member=$request->input('group_member');
-            if($Group->save()){
-                $group = Group::orderBy('created_at', 'desc')->first();
+            $group= new Group();
+            $group->group_name=$request->input('group_name');
+            $group->group_image=$request->input('group_image');
+            $group->address_id=$request->input('address_id');
+            $group->group_admin= $request->input('group_admin');
+
+            if($group->save()){
+                $data = Group::query()
+                    ->select('group_id')
+                    ->where('address_id', '=', $group->address_id)
+                    ->where('group_admin', '=', $group->group_admin)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                $member = new GroupMember();
+                $member->group_id = $data->group_id;
+                $member->id_user = $group->group_admin;
+                $member->save();
                 return response()->json([
                     'data'=>$group,
                     'status'=>200,
