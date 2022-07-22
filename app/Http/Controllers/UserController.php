@@ -29,7 +29,7 @@ class UserController extends Controller
                 ->where('user_travel.id', '=', $user_id)
                 ->first();
             $follow = Follow::query()
-                ->select('follow_status')
+                ->select('follow_status',)
                 ->where('follower', '=', $current_user_id)
                 ->where('being_follower', '=', $user_id)
                 ->where('follow_status', '=', '1')
@@ -38,6 +38,16 @@ class UserController extends Controller
                 $profile->follow_status = $follow->follow_status;
             else
                 $profile->follow_status = null;
+            $followCount = Follow::query()
+                ->select( DB::raw('count(follower) as number_follow'))
+                ->where('being_follower', '=', $user_id)
+                ->where('follow_status', '=', '1')
+                ->groupBy('being_follower')
+                ->first();
+            if($followCount)
+                $profile->number_follow = $followCount->number_follow;
+            else
+                $profile->number_follow = 0;
             $blog = BlogAddress::query()
                 ->join('address', 'blog_address.address_id', '=', 'address.address_id')
                 ->join('user_travel', 'blog_address.id_user', '=', 'user_travel.id')
