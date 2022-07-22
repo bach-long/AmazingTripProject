@@ -8,6 +8,15 @@ use App\Models\User;
 
 class RegisterController extends Controller
 {
+    public function getUsers()
+    {
+        $users = User::all();
+        return response()->json([
+            'users' => $users,
+            'status' => 200,
+            'message' => 'Get users successfully'
+        ]);
+    }
     public function PostRegister(Request $request){
         if($request){
             $checkEmail = User::where('email',$request->email)->first() ;

@@ -9,6 +9,7 @@ use App\Models\ReactionBlogAddress;
 use App\Models\User;
 
 class BlogAddressController extends Controller
+
 {
     public function getBlog($address_id)
     {

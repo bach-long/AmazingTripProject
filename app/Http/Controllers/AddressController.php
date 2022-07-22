@@ -31,6 +31,11 @@ class AddressController extends Controller
             'message' => 'Get address successfully'
         ]);
     }
+    public function getNumberofAddress()
+    {
+        $address = Address::all();
+        return $address->count();
+    }
     public function postAddress(Request $req)
     {
         if($req){
@@ -262,6 +267,43 @@ class AddressController extends Controller
                 'message' => 'Address not found'
             ]);
         }
+    }
+    public function AddressesByDate(){
+        $date1 = date('Y-m-d', strtotime('-6 days'));
+        $count1 = Address::whereDate('created_at', $date1)->count();
+        $date2 = date('Y-m-d', strtotime('-5 days'));
+        $count2 = Address::whereDate('created_at', $date2)->count();
+        $date3 = date('Y-m-d', strtotime('-4 days'));
+        $count3 = Address::whereDate('created_at', $date3)->count();
+        $date4 = date('Y-m-d', strtotime('-3 days'));
+        $count4 = Address::whereDate('created_at', $date4)->count();
+        $date5 = date('Y-m-d', strtotime('-2 days'));
+        $count5 = Address::whereDate('created_at', $date5)->count();
+        $date6 = date('Y-m-d', strtotime('-1 days'));
+        $count6 = Address::whereDate('created_at', $date6)->count();
+        $date7 = date('Y-m-d', strtotime('-0 days'));
+        $count7 = Address::whereDate('created_at', $date7)->count();
+       
+
+        // $dateExact = substr($date, 0, 10);
+        return response()->json([
+            'date1' => $date1,
+            'count1' => $count1,
+            'date2' => $date2,
+            'count2' => $count2,
+            'date3' => $date3,
+            'count3' => $count3,
+            'date4' => $date4,
+            'count4' => $count4,
+            'date5' => $date5,
+            'count5' => $count5,
+            'date6' => $date6,
+            'count6' => $count6,
+            'date7' => $date7,
+            'count7' => $count7,
+        ]);
+
+
     }
 
     //tìm danh sách address theo lượt theo dõi nhiều nhất
