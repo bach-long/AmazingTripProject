@@ -17,7 +17,7 @@ use App\Http\Controllers\FormRegisterController;
 use App\Http\Controllers\LoginControler;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
