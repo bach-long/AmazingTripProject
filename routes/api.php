@@ -149,6 +149,13 @@ Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressControll
 Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 
 
+//for userhomepage
+Route::get('/allInfoAddresses/{id_user}',[AddressController::class, 'getAllInfoAddress']);
+
+
+
+
+
 
 
 

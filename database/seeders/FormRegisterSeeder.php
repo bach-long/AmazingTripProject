@@ -13,6 +13,6 @@ class FormRegisterSeeder extends Seeder
      */
     public function run()
     {
-        FormRegister::factory()->count(10)->craete();
+        FormRegister::factory()->count(10)->create();
     }
 }
