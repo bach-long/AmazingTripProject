@@ -17,7 +17,7 @@ class CreateTableBlogAddress extends Migration
             $table->id('blog_address_id');
             $table->bigInteger('id_user')->unsigned();
             $table->bigInteger('address_id')->unsigned();
-            $table->integer('blog_address_vote');
+            $table->integer('blog_address_vote');        
             $table->string('blog_address_image');
             $table->longText('blog_address_content');
             $table->foreign('id_user')->references('id')->on('user_travel')->onDelete('cascade')->onUpdate('cascade');

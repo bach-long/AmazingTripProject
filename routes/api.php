@@ -103,6 +103,7 @@ Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);
 //Groups
 Route::post('/CreateGroupForm',[CreateGroupFormController::class,'CreateGroup']);
 
+Route::get('/group/{address_id}',[GroupController::class,'getGroup']);
 Route::get('/groups',[GroupController::class,'getGroup']);
 Route::get('/numberofgroups',[GroupController::class,'NumberofGroups']);
 Route::get('/groupsbydate',[GroupController::class,'GroupsByDate']);
@@ -151,7 +152,8 @@ Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 //search
 Route::get('/search={search}','App\Http\Controllers\SearchController@Search');
 
-
+//Host
+Route::get('/hosts',[UserController::class,'getHostInfo']);  // lay tat ca thong tin ve host ( ten, sdt,so luong khu du lich, so luong khach hang)
 
 
 

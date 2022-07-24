@@ -11,6 +11,7 @@ use App\Models\GroupMember;
 use App\Models\ReactionBlogAddress;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Discount;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -230,11 +231,35 @@ class UserController extends Controller
             'date7' => $date7,
             'count7' => $count7,
         ]);
-
-
     }
 
-    
-
-
+    public function getHostInfo(){
+        $hosts=User::where('role',1)->get();
+        $count=$hosts->count();
+        if($count!=0){
+            foreach($hosts as $host){
+                $num_of_address=Address::where('id_host',$host->id)->count();
+                $addresses=Address::where('id_host',$host->id)->get();
+                $num_of_customer=0;
+                foreach($addresses as $address){
+                    $discounts=Discount::where('address_id','=',$address->address_id)->get();
+                    foreach($discounts as $discount){
+                        $num_of_customer+= $discount->number_registed;
+                    }
+                }
+                $host->number_of_address=$num_of_address;
+                $host->number_of_customer=$num_of_customer;
+            }
+            return response()->json([
+                'data'=>$hosts,
+                'status'=>200,
+                'message'=>'get host information successfully'
+            ]);    
+        } else{
+            return response()->json([
+                'status'=>400,
+                'message'=>'no host had found'
+            ]);
+        }           
+    }     
 }
