@@ -148,7 +148,8 @@ Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressControll
 //Reaction
 Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 
-
+//search
+Route::get('/search={search}','App\Http\Controllers\SearchController@Search');
 
 
 
