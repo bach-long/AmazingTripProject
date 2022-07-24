@@ -266,6 +266,7 @@ class AddressController extends Controller
             ]);
         }
     }
+<<<<<<< HEAD
     public function AddressesByDate()
     {
         $date1 = date('Y-m-d', strtotime('-6 days'));
@@ -302,6 +303,8 @@ class AddressController extends Controller
             'count7' => $count7,
         ]);
     }
+=======
+>>>>>>> cf4b772f9e79d4c926e0f1279d5f9b935326af38
 
     //tìm danh sách address theo lượt theo dõi nhiều nhất
     public function ListAddressByBookmark()
@@ -432,5 +435,41 @@ class AddressController extends Controller
                 'message' => 'Have no address'
             ]);
         }
+    }
+
+    public function AddressesByDate(){
+        $date1 = date('Y-m-d', strtotime('-6 days'));
+        $count1 = Address::whereDate('created_at', $date1)->count();
+        $date2 = date('Y-m-d', strtotime('-5 days'));
+        $count2 = Address::whereDate('created_at', $date2)->count();
+        $date3 = date('Y-m-d', strtotime('-4 days'));
+        $count3 = Address::whereDate('created_at', $date3)->count();
+        $date4 = date('Y-m-d', strtotime('-3 days'));
+        $count4 = Address::whereDate('created_at', $date4)->count();
+        $date5 = date('Y-m-d', strtotime('-2 days'));
+        $count5 = Address::whereDate('created_at', $date5)->count();
+        $date6 = date('Y-m-d', strtotime('-1 days'));
+        $count6 = Address::whereDate('created_at', $date6)->count();
+        $date7 = date('Y-m-d', strtotime('-0 days'));
+        $count7 = Address::whereDate('created_at', $date7)->count();
+       
+
+        // $dateExact = substr($date, 0, 10);
+        return response()->json([
+            'date1' => $date1,
+            'count1' => $count1,
+            'date2' => $date2,
+            'count2' => $count2,
+            'date3' => $date3,
+            'count3' => $count3,
+            'date4' => $date4,
+            'count4' => $count4,
+            'date5' => $date5,
+            'count5' => $count5,
+            'date6' => $date6,
+            'count6' => $count6,
+            'date7' => $date7,
+            'count7' => $count7,
+        ]);
     }
 }

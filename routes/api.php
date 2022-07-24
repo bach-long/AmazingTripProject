@@ -17,7 +17,7 @@ use App\Http\Controllers\FormRegisterController;
 use App\Http\Controllers\LoginControler;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
-
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -148,6 +148,7 @@ Route::delete('/deleteCommentBlog/{comment_blog_id}',[CommentBlogAddressControll
 //Reaction
 Route::post('/reactBlog',[BlogReactionController::class, 'reactionUpdate']);
 
+<<<<<<< HEAD
 
 //for userhomepage
 Route::get('/allInfoAddresses/{id_user}',[AddressController::class, 'getAllInfoAddress']);
@@ -156,6 +157,10 @@ Route::get('/allInfoAddresses/{id_user}',[AddressController::class, 'getAllInfoA
 
 
 
+=======
+//search
+Route::get('/search={search}','App\Http\Controllers\SearchController@Search');
+>>>>>>> cf4b772f9e79d4c926e0f1279d5f9b935326af38
 
 
 
