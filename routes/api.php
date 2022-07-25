@@ -8,6 +8,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentBlogController;
+use App\Http\Controllers\SearchControler;
 
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\FollowController;
@@ -34,6 +35,8 @@ Route::post('/register',[RegisterController::class,'PostRegister']);
 
 Route::get('/profile/{user_id}/{current_user_id}',[UserController::class,'getProfile']);
 Route::get('/user/{user_id}',[UserController::class,'getUserData']);
+
+Route::get('/search={search}','App\Http\Controllers\SearchController@Search');
 
 
 Route::get('/address',[AddressController::class,'getAddress']);

@@ -102,7 +102,7 @@ class UserController extends Controller
         if ($user_id != 0) {
             $bookmark = Bookmark::query()
                 ->join('address', 'bookmark.address_id', '=', 'address.address_id')
-                ->select('address.address_id', 'address.address_name')
+                ->select('address.address_id', 'address.address_name', 'address.address_image')
                 ->where('id_user', '=', $user_id)
                 ->where('status', '=', '1')
                 ->get();
