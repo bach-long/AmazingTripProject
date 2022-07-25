@@ -8,7 +8,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\BookmarkController;
 use App\Http\Controllers\CommentBlogController;
-use App\Http\Controllers\SearchControler;
+use App\Http\Controllers\SearchController;
 
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\FollowController;
@@ -36,7 +36,7 @@ Route::post('/register',[RegisterController::class,'PostRegister']);
 Route::get('/profile/{user_id}/{current_user_id}',[UserController::class,'getProfile']);
 Route::get('/user/{user_id}',[UserController::class,'getUserData']);
 
-Route::get('/search={search}','App\Http\Controllers\SearchController@Search');
+Route::get('/search={search}',[SearchController::class, 'Search']);
 
 
 Route::get('/address',[AddressController::class,'getAddress']);
@@ -69,6 +69,7 @@ Route::get('/reactCheck/{blog_id}/{id_user}',[BlogReactionController::class, 're
 Route::delete('/unReaction/{blog_id}/{id_user}',[BlogReactionController::class, 'unReaction']);
 
 Route::get('/bookmark/{id_user}',[BookmarkController::class,'getBookmark']);
+Route::get('/userBookmark/{address_id}',[BookmarkController::class,'getUserBookmark']);
 Route::get('/bookmark/{address_id}/{id_user}',[BookmarkController::class,'checkBookmark']);
 Route::post('/bookmark',[BookmarkController::class,'postBookmark']);
 Route::delete('/bookmark/{id}',[BookmarkController::class,'deleteBookmark']);

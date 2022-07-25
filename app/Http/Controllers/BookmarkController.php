@@ -23,6 +23,23 @@ class BookmarkController extends Controller
         ]);
     }
 
+    public function getUserBookmark($address_id)
+    {
+        $bookmark = Bookmark::query()
+            ->join('address', 'bookmark.address_id', '=', 'address.address_id')
+            ->select('bookmark.id_user',
+                'address.address_id',
+                'address.address_name',
+            )
+            ->where('bookmark.address_id', '=', $address_id)
+            ->get();
+        return response()->json([
+            'data' =>  $bookmark,
+            'status' => 200,
+            'message' => 'Get address successfully'
+        ]);
+    }
+
     public function checkBookmark($address_id, $id_user)
     {
         $bookmark = Bookmark::where('address_id', $address_id)->where('id_user', $id_user)->first();

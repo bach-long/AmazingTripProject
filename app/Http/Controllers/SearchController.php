@@ -21,7 +21,7 @@ class SearchController extends Controller
             if($search){
                 $user= DB::table('user_travel')
                       -> select ('user_travel.*')
-                      -> where('username','like','%'.$search.'%')
+                      -> where('nickname','like','%'.$search.'%')
                       ->get();
                 $count1= $user->count();
 
@@ -39,11 +39,11 @@ class SearchController extends Controller
                     $count=BlogAddress::where('address_id','=',$add->address_id)
                                 ->count();
                     if($count!=0){
-                        $add->vote=$sumvote->SUMVOTE/$count; 
+                        $add->vote=$sumvote->SUMVOTE/$count;
                     }else{
-                        $add->vote=0; 
+                        $add->vote=0;
                     }
-                  
+
                 }
                 $count2=$address->count();
 
@@ -54,21 +54,20 @@ class SearchController extends Controller
                     ]);
                 }else{
                     return response()->json([
-                        
                         'user'=>$user,
                         'address'=>$address,
                         'status'=>200,
                         'message'=>'the result suitable'
                     ]);
                 }
-                
+
             }else{
                 return response()->json([
                     'status'=>400,
                     'message'=>'Search false'
                 ]);
             }
-            
+
         }
     }
 }
