@@ -15,6 +15,9 @@ class BookmarkController extends Controller
         {
             $address = Address::where('address_id', $each->address_id)->first();
             $each->address_name = $address->address_name;
+            $each->count = Bookmark::where('address_id',$each->address_id)->count();
+            $each->address_image = $address->address_image;
+
         }
         return response()->json([
             'data' =>  $bookmark,
