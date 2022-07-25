@@ -17,7 +17,8 @@ class BookmarkFactory extends Factory
     {
         return [
               'address_id'=>$this->faker->numberBetween(1,10),
-              'id_user'=>$this->faker->numberBetween(1,50)
+              'id_user'=>$this->faker->numberBetween(1,50),
+              'status'=>$this->faker->randomElement([0,1])
         ];
     }
 }
