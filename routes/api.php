@@ -18,7 +18,6 @@ use App\Http\Controllers\FormRegisterController;
 use App\Http\Controllers\LoginControler;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,7 +49,7 @@ Route::get('/hostsbydate',[UserController::class,'getHostsByDate']);
 
 Route::get('/getUser/{phone}',[GetUserController::class,'GetUser']);
 
-Route::get('/profile/{user_id}/{current_user_id}',[UserController::class,'getProfile']);        
+Route::get('/profile/{user_id}/{current_user_id}',[UserController::class,'getProfile']);
 Route::get('/user/{user_id}',[UserController::class,'getUserData']);
 
 Route::get('/search={search}',[SearchController::class, 'Search']);
@@ -68,14 +67,14 @@ Route::delete('/address/{id}',[AddressController::class,'deleteAddress']);
 
 Route::get('/address_by_host/{id}/{user_id}',[AddressController::class,'getAddressByHost']);
 Route::get('/addressHost/{user_id}',[AddressController::class,'getAddressHost']);
-Route::get('/listaddressbybookmark',[AddressController::class,'ListAddressByBookmark']);   // lấy địa điểm theo lượt theo dõi 
-Route::get('/listaddressbydiscount',[AddressController::class,'ListAddressByDiscount']);   // lấy địa điểm theo khuyến mãi 
+Route::get('/listaddressbybookmark',[AddressController::class,'ListAddressByBookmark']);   // lấy địa điểm theo lượt theo dõi
+Route::get('/listaddressbydiscount',[AddressController::class,'ListAddressByDiscount']);   // lấy địa điểm theo khuyến mãi
 Route::get('/listaddressbookmarked/{id_user}',[AddressController::class,'ListAddressBookmarked']); // lấy danh sách địa điểm đã bookmark theo thời gian theo id_user
 
 // Blog Address
 Route::get('/blogAddress/{address_id}',[BlogAddressController::class,'getBlog']);
 Route::get('/address_by_host/{id}',[AddressController::class,'getAddressByHost']);
-Route::get('/blogaddresses',[BlogAddressController::class,'getAllBlogAddress']);           
+Route::get('/blogaddresses',[BlogAddressController::class,'getAllBlogAddress']);
 Route::get('/blog/{id}',[BlogController::class,'getBlog']);
 Route::post('/blogAddress',[BlogAddressController::class,'postBlog']);
 Route::delete('/blogaddress/{id}',[BlogAddressController::class,'deleteBlog']);
@@ -131,7 +130,7 @@ Route::patch('/discount/{id}',[DiscountController::class,'editDiscount']);
 Route::delete('/discount/{id}',[DiscountController::class,'deleteDiscount']);
 Route::get('/discount/address={address_id}',[DiscountController::class,'getFormDiscount']);
 
-//comment 
+//comment
 Route::post('/createCommentBlog/{blog_id}',[CommentBlogAddressController::class, 'createCommentBlog']);
 Route::get('/commentsBlog/{blog_id}',[CommentBlogAddressController::class, 'getAllCommentBlog']);
 Route::patch('/editCommentBlog',[CommentBlogAddressController::class, 'editCommentBlog']);
