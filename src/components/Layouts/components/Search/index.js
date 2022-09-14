@@ -31,7 +31,7 @@ function Search() {
         }
         setLoading(true);
 
-        fetch(`http://localhost:8000/api/search=${encodeURIComponent(debounced)}`)
+        fetch(`${process.env.REACT_APP_API_URL}/search=${encodeURIComponent(debounced)}`)
             .then((res) => res.json())
             .then((res) => {
                 // res.user?.map( async (each) => {
